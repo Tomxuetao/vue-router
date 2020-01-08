@@ -8,13 +8,13 @@ import { isExtendedError } from '../util/warn'
 export class AbstractHistory extends History {
     index: number
     stack: Array<Route>
-    
+
     constructor (router: Router, base: ?string) {
         super(router, base)
         this.stack = []
         this.index = -1
     }
-    
+
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         this.transitionTo(
             location,
@@ -26,7 +26,7 @@ export class AbstractHistory extends History {
             onAbort
         )
     }
-    
+
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         this.transitionTo(
             location,
@@ -37,7 +37,7 @@ export class AbstractHistory extends History {
             onAbort
         )
     }
-    
+
     go (n: number) {
         const targetIndex = this.index + n
         if (targetIndex < 0 || targetIndex >= this.stack.length) {
@@ -57,12 +57,12 @@ export class AbstractHistory extends History {
             }
         )
     }
-    
+
     getCurrentLocation () {
         const current = this.stack[this.stack.length - 1]
         return current ? current.fullPath : '/'
     }
-    
+
     ensureURL () {
         // noop
     }

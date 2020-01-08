@@ -37,37 +37,37 @@ const Bar = () => import(/* webpackChunkName: "bar" */ './Bar.vue')
 const Baz = () => import(/* webpackChunkName: "bar" */ './Baz.vue')
 
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home },
-    // Just use them normally in the route config
-    { path: '/foo', component: Foo },
-    // multiple parameters, `/` should not be encoded. The name is also important
-    // https://github.com/vuejs/vue-router/issues/2719
-    { path: '/a/:tags*', name: 'tagged', component: () => new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          template: `<div>
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home },
+        // Just use them normally in the route config
+        { path: '/foo', component: Foo },
+        // multiple parameters, `/` should not be encoded. The name is also important
+        // https://github.com/vuejs/vue-router/issues/2719
+        { path: '/a/:tags*', name: 'tagged', component: () => new Promise(resolve => {
+            setTimeout(() => {
+                resolve({
+                    template: `<div>
             <h2>Lazy with params</h2>
             <pre id="tagged-path">{{ $route.path }}</pre>
           </div>`
-        })
-      }, 200)
-    }) },
-    // Bar and Baz belong to the same root route
-    // and grouped in the same async chunk.
-    { path: '/bar', component: Bar,
-      children: [
-        { path: 'baz', component: Baz }
-      ]
-    }
-  ]
+                })
+            }, 200)
+        }) },
+        // Bar and Baz belong to the same root route
+        // and grouped in the same async chunk.
+        { path: '/bar', component: Bar,
+            children: [
+                { path: 'baz', component: Baz }
+            ]
+        }
+    ]
 })
 
 new Vue({
-  router,
-  template: `
+    router,
+    template: `
     <div id="app">
       <h1>Lazy Loading</h1>
       <ul>

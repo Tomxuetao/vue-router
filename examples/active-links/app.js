@@ -7,7 +7,7 @@ const Home = { template: '<div><h2>Home</h2></div>' }
 const About = { template: '<div><h2>About</h2></div>' }
 
 const Users = {
-  template: `
+    template: `
     <div>
       <h2>Users</h2>
       <router-view></router-view>
@@ -18,7 +18,7 @@ const Users = {
 const User = { template: '<div>{{ $route.params.username }}</div>' }
 
 const Gallery = {
-  template: `
+    template: `
     <div>
       <h2>Gallery</h2>
       <router-view></router-view>
@@ -29,44 +29,44 @@ const Gallery = {
 const Image = { template: '<div>{{ $route.params.imageId }}</div>' }
 
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home },
-    { path: '/about', component: About },
-    {
-      path: '/redirect-gallery',
-      name: 'redirect-gallery',
-      redirect: { name: 'gallery' }
-    },
-    {
-      path: '/redirect-image',
-      name: 'redirect-image',
-      redirect: { name: 'image', params: { imageId: 'image1' }}
-    },
-    {
-      path: '/users',
-      component: Users,
-      children: [{ path: ':username', name: 'user', component: User }]
-    },
-    {
-      path: '/gallery',
-      component: Gallery,
-      children: [
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home },
+        { path: '/about', component: About },
         {
-          path: '',
-          name: 'gallery',
-          redirect: { name: 'image', params: { imageId: 'image1' }}
+            path: '/redirect-gallery',
+            name: 'redirect-gallery',
+            redirect: { name: 'gallery' }
         },
-        { path: ':imageId', component: Image, name: 'image' }
-      ]
-    }
-  ]
+        {
+            path: '/redirect-image',
+            name: 'redirect-image',
+            redirect: { name: 'image', params: { imageId: 'image1' }}
+        },
+        {
+            path: '/users',
+            component: Users,
+            children: [{ path: ':username', name: 'user', component: User }]
+        },
+        {
+            path: '/gallery',
+            component: Gallery,
+            children: [
+                {
+                    path: '',
+                    name: 'gallery',
+                    redirect: { name: 'image', params: { imageId: 'image1' }}
+                },
+                { path: ':imageId', component: Image, name: 'image' }
+            ]
+        }
+    ]
 })
 
 new Vue({
-  router,
-  template: `
+    router,
+    template: `
     <div id="app">
       <h1>Active Links</h1>
       <ul>

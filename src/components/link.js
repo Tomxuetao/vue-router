@@ -41,7 +41,7 @@ export default {
             current,
             this.append
         )
-        
+
         const classes = {}
         const globalActiveClass = router.options.linkActiveClass
         const globalExactActiveClass = router.options.linkExactActiveClass
@@ -58,16 +58,16 @@ export default {
             this.exactActiveClass == null
                 ? exactActiveClassFallback
                 : this.exactActiveClass
-        
+
         const compareTarget = route.redirectedFrom
             ? createRoute(null, normalizeLocation(route.redirectedFrom), null, router)
             : route
-        
+
         classes[exactActiveClass] = isSameRoute(current, compareTarget)
         classes[activeClass] = this.exact
             ? classes[exactActiveClass]
             : isIncludedRoute(current, compareTarget)
-        
+
         const handler = e => {
             if (guardEvent(e)) {
                 if (this.replace) {
@@ -77,7 +77,7 @@ export default {
                 }
             }
         }
-        
+
         const on = { click: guardEvent }
         if (Array.isArray(this.event)) {
             this.event.forEach(e => {
@@ -86,9 +86,9 @@ export default {
         } else {
             on[this.event] = handler
         }
-        
+
         const data: any = { class: classes }
-        
+
         const scopedSlot =
             !this.$scopedSlots.$hasNormal &&
             this.$scopedSlots.default &&
@@ -99,7 +99,7 @@ export default {
                 isActive: classes[activeClass],
                 isExactActive: classes[exactActiveClass]
             })
-        
+
         if (scopedSlot) {
             if (scopedSlot.length === 1) {
                 return scopedSlot[0]
@@ -115,7 +115,7 @@ export default {
                 return scopedSlot.length === 0 ? h() : h('span', {}, scopedSlot)
             }
         }
-        
+
         if (this.tag === 'a') {
             data.on = on
             data.attrs = { href }
@@ -143,7 +143,7 @@ export default {
                         aData.on[event] = handler
                     }
                 }
-                
+
                 const aAttrs = (a.data.attrs = extend({}, a.data.attrs))
                 aAttrs.href = href
             } else {
@@ -151,7 +151,7 @@ export default {
                 data.on = on
             }
         }
-        
+
         return h(this.tag, data, this.$slots.default)
     }
 }

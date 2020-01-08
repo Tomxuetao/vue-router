@@ -4,48 +4,48 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Log = {
-  template: `<div class="log">id: {{ $route.params.id }}, type: {{ $route.params.type }}</div>`
+    template: `<div class="log">id: {{ $route.params.id }}, type: {{ $route.params.type }}</div>`
 }
 
 const Logs = {
-  template: `
+    template: `
     <div>
       <pre id="params">{{ to.params }}</pre>
       <router-link :to="to" class="child-link">{{ to.params.type }}</router-link>
       <router-view></router-view>
     </div>
   `,
-  data () {
-    return {
-      to: {
-        name: 'items.logs.type',
-        params: { type: 'info' }
-      }
+    data () {
+        return {
+            to: {
+                name: 'items.logs.type',
+                params: { type: 'info' }
+            }
+        }
     }
-  }
 }
 
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    {
-      path: '/items/:id/logs',
-      component: Logs,
-      children: [
+    mode: 'history',
+    base: __dirname,
+    routes: [
         {
-          path: ':type',
-          name: 'items.logs.type',
-          component: Log
+            path: '/items/:id/logs',
+            component: Logs,
+            children: [
+                {
+                    path: ':type',
+                    name: 'items.logs.type',
+                    component: Log
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 })
 
 new Vue({
-  router,
-  template: `
+    router,
+    template: `
     <div id="app">
       <h1>Route params</h1>
       <ul>

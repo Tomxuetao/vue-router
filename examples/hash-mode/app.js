@@ -14,23 +14,23 @@ const Unicode = { template: '<div>unicode: {{ $route.params.unicode }}</div>' }
 
 // 3. Create the router
 const router = new VueRouter({
-  mode: 'hash',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home }, // all paths are defined without the hash.
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar },
-    { path: '/é', component: Unicode },
-    { path: '/é/:unicode', component: Unicode }
-  ]
+    mode: 'hash',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home }, // all paths are defined without the hash.
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar },
+        { path: '/é', component: Unicode },
+        { path: '/é/:unicode', component: Unicode }
+    ]
 })
 
 // 4. Create and mount root instance.
 // Make sure to inject the router.
 // Route components will be rendered inside <router-view>.
 new Vue({
-  router,
-  template: `
+    router,
+    template: `
     <div id="app">
       <h1>Mode: 'hash'</h1>
       <ul>

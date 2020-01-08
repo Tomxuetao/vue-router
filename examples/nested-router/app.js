@@ -7,16 +7,16 @@ const Foo = { template: `<div class="foo"><h1>foo</h1></div>` }
 const Bar = { template: `<div class="bar"><h1>bar</h1></div>` }
 
 const childRouter = new VueRouter({
-  mode: 'abstract',
-  routes: [
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar }
-  ]
+    mode: 'abstract',
+    routes: [
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar }
+    ]
 })
 
 const Nested = {
-  router: childRouter,
-  template: `<div class="child">
+    router: childRouter,
+    template: `<div class="child">
     <p>Child router path: {{ $route.fullPath }}</p>
     <ul>
       <li><router-link to="/foo">/foo</router-link></li>
@@ -27,18 +27,18 @@ const Nested = {
 }
 
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/nested-router', component: Nested },
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar }
-  ]
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/nested-router', component: Nested },
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar }
+    ]
 })
 
 new Vue({
-  router,
-  template: `
+    router,
+    template: `
     <div id="app">
       <p>Root router path: {{ $route.fullPath }}</p>
       <ul>

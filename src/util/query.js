@@ -36,20 +36,20 @@ export function resolveQuery (
 
 function parseQuery (query: string): Dictionary<string> {
     const res = {}
-    
+
     query = query.trim().replace(/^(\?|#|&)/, '')
-    
+
     if (!query) {
         return res
     }
-    
+
     query.split('&').forEach(param => {
         const parts = param.replace(/\+/g, ' ').split('=')
         const key = decode(parts.shift())
         const val = parts.length > 0
             ? decode(parts.join('='))
             : null
-        
+
         if (res[key] === undefined) {
             res[key] = val
         } else if (Array.isArray(res[key])) {
@@ -58,22 +58,22 @@ function parseQuery (query: string): Dictionary<string> {
             res[key] = [res[key], val]
         }
     })
-    
+
     return res
 }
 
 export function stringifyQuery (obj: Dictionary<string>): string {
     const res = obj ? Object.keys(obj).map(key => {
         const val = obj[key]
-        
+
         if (val === undefined) {
             return ''
         }
-        
+
         if (val === null) {
             return encode(key)
         }
-        
+
         if (Array.isArray(val)) {
             const result = []
             val.forEach(val2 => {
@@ -88,7 +88,7 @@ export function stringifyQuery (obj: Dictionary<string>): string {
             })
             return result.join('&')
         }
-        
+
         return encode(key) + '=' + encode(val)
     }).filter(x => x.length > 0).join('&') : null
     return res ? `?${res}` : ''

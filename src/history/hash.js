@@ -16,18 +16,18 @@ export class HashHistory extends History {
         }
         ensureSlash()
     }
-    
+
     // this is delayed until the app mounts
     // to avoid the hashchange listener being fired too early
     setupListeners () {
         const router = this.router
         const expectScroll = router.options.scrollBehavior
         const supportsScroll = supportsPushState && expectScroll
-        
+
         if (supportsScroll) {
             setupScroll()
         }
-        
+
         window.addEventListener(
             supportsPushState ? 'popstate' : 'hashchange',
             () => {
@@ -46,7 +46,7 @@ export class HashHistory extends History {
             }
         )
     }
-    
+
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(
@@ -59,7 +59,7 @@ export class HashHistory extends History {
             onAbort
         )
     }
-    
+
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(
@@ -72,18 +72,18 @@ export class HashHistory extends History {
             onAbort
         )
     }
-    
+
     go (n: number) {
         window.history.go(n)
     }
-    
+
     ensureURL (push?: boolean) {
         const current = this.current.fullPath
         if (getHash() !== current) {
             push ? pushHash(current) : replaceHash(current)
         }
     }
-    
+
     getCurrentLocation () {
         return getHash()
     }
@@ -113,7 +113,7 @@ export function getHash (): string {
     const index = href.indexOf('#')
     // empty path
     if (index < 0) return ''
-    
+
     href = href.slice(index + 1)
     // decode the hash but not the search or hash
     // as search(query) is already decoded
@@ -127,7 +127,7 @@ export function getHash (): string {
     } else {
         href = decodeURI(href.slice(0, searchIndex)) + href.slice(searchIndex)
     }
-    
+
     return href
 }
 

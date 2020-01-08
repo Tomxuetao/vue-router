@@ -1,10 +1,15 @@
 {
-  "root": true,
-  "plugins": [
-    "flowtype"
-  ],
-  "extends": [
-    "plugin:vue-libs/recommended",
-    "plugin:flowtype/recommended"
-  ]
+    "root": true,
+    "plugins": [
+        "flowtype"
+    ],
+    "extends": [
+        "plugin:vue-libs/recommended",
+        "plugin:flowtype/recommended"
+    ],
+    "rules": {
+        "indent": ["error", 4],
+        "space-before-function-paren": "error",
+        "func-call-spacing": ["error", "never"]
+    }
 }

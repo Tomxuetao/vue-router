@@ -18,10 +18,10 @@ export function fillParams (
         const filler =
             regexpCompileCache[path] ||
             (regexpCompileCache[path] = Regexp.compile(path))
-        
+
         // Fix #2505 resolving asterisk routes { name: 'not-found', params: { pathMatch: '/not-found' }}
         if (params.pathMatch) params[0] = params.pathMatch
-        
+
         return filler(params, { pretty: true })
     } catch (e) {
         if (process.env.NODE_ENV !== 'production') {

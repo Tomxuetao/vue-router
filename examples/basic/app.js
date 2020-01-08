@@ -14,23 +14,23 @@ const Unicode = { template: '<div>unicode</div>' }
 
 // 3. Create the router
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home },
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar },
-    { path: '/é', component: Unicode }
-  ]
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home },
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar },
+        { path: '/é', component: Unicode }
+    ]
 })
 
 // 4. Create and mount root instance.
 // Make sure to inject the router.
 // Route components will be rendered inside <router-view>.
 new Vue({
-  router,
-  data: () => ({ n: 0 }),
-  template: `
+    router,
+    data: () => ({ n: 0 }),
+    template: `
     <div id="app">
       <h1>Basic</h1>
       <ul>
@@ -57,14 +57,14 @@ new Vue({
     </div>
   `,
 
-  methods: {
-    navigateAndIncrement () {
-      const increment = () => this.n++
-      if (this.$route.path === '/') {
-        this.$router.push('/foo', increment)
-      } else {
-        this.$router.push('/', increment)
-      }
+    methods: {
+        navigateAndIncrement () {
+            const increment = () => this.n++
+            if (this.$route.path === '/') {
+                this.$router.push('/foo', increment)
+            } else {
+                this.$router.push('/', increment)
+            }
+        }
     }
-  }
 }).$mount('#app')

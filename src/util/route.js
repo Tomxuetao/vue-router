@@ -12,13 +12,13 @@ export function createRoute (
     router?: VueRouter
 ): Route {
     const stringifyQuery = router && router.options.stringifyQuery
-    
+
     let query: any = location.query || {}
     try {
         query = clone(query)
     } catch (e) {
     }
-    
+
     const route: Route = {
         name: location.name || (record && record.name),
         meta: (record && record.meta) || {},

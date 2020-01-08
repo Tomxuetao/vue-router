@@ -20,11 +20,11 @@ export function createRouteMap (
     const pathMap: Dictionary<RouteRecord> = oldPathMap || Object.create(null)
     // $flow-disable-line
     const nameMap: Dictionary<RouteRecord> = oldNameMap || Object.create(null)
-    
+
     routes.forEach(route => {
         addRouteRecord(pathList, pathMap, nameMap, route)
     })
-    
+
     // ensure wildcard routes are always at the end
     for (let i = 0, l = pathList.length; i < l; i++) {
         if (pathList[i] === '*') {
@@ -33,19 +33,19 @@ export function createRouteMap (
             i--
         }
     }
-    
+
     if (process.env.NODE_ENV === 'development') {
         // warn if routes do not include leading slashes
         const found = pathList
             // check for missing leading slash
             .filter(path => path && path.charAt(0) !== '*' && path.charAt(0) !== '/')
-        
+
         if (found.length > 0) {
             const pathNames = found.map(path => `- ${path}`).join('\n')
             warn(false, `Non-nested routes must include a leading slash character. Fix the following routes: \n${pathNames}`)
         }
     }
-    
+
     return {
         pathList,
         pathMap,
@@ -71,15 +71,15 @@ function addRouteRecord (
             )} cannot be a ` + `string id. Use an actual component instead.`
         )
     }
-    
+
     const pathToRegexpOptions: PathToRegexpOptions =
         route.pathToRegexpOptions || {}
     const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
-    
+
     if (typeof route.caseSensitive === 'boolean') {
         pathToRegexpOptions.sensitive = route.caseSensitive
     }
-    
+
     const record: RouteRecord = {
         path: normalizedPath,
         regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
@@ -95,10 +95,10 @@ function addRouteRecord (
             route.props == null
                 ? {}
                 : route.components
-                ? route.props
-                : { default: route.props }
+                    ? route.props
+                    : { default: route.props }
     }
-    
+
     if (route.children) {
         // Warn if route is named, does not redirect and has a default child route.
         // If users navigate to this route by name, the default child will
@@ -128,12 +128,12 @@ function addRouteRecord (
             addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs)
         })
     }
-    
+
     if (!pathMap[record.path]) {
         pathList.push(record.path)
         pathMap[record.path] = record
     }
-    
+
     if (route.alias !== undefined) {
         const aliases = Array.isArray(route.alias) ? route.alias : [route.alias]
         for (let i = 0; i < aliases.length; ++i) {
@@ -146,7 +146,7 @@ function addRouteRecord (
                 // skip in dev to make it work
                 continue
             }
-            
+
             const aliasRoute = {
                 path: alias,
                 children: route.children
@@ -161,7 +161,7 @@ function addRouteRecord (
             )
         }
     }
-    
+
     if (name) {
         if (!nameMap[name]) {
             nameMap[name] = record

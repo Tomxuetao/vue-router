@@ -23,14 +23,14 @@ export class History {
     readyCbs: Array<Function>
     readyErrorCbs: Array<Function>
     errorCbs: Array<Function>
-    
+
     // implemented by sub-classes
     +go: (n: number) => void
     +push: (loc: RawLocation) => void
     +replace: (loc: RawLocation) => void
     +ensureURL: (push?: boolean) => void
     +getCurrentLocation: () => string
-    
+
     constructor (router: Router, base: ?string) {
         this.router = router
         this.base = normalizeBase(base)
@@ -42,11 +42,11 @@ export class History {
         this.readyErrorCbs = []
         this.errorCbs = []
     }
-    
+
     listen (cb: Function) {
         this.cb = cb
     }
-    
+
     onReady (cb: Function, errorCb: ?Function) {
         if (this.ready) {
             cb()
@@ -57,11 +57,11 @@ export class History {
             }
         }
     }
-    
+
     onError (errorCb: Function) {
         this.errorCbs.push(errorCb)
     }
-    
+
     transitionTo (
         location: RawLocation,
         onComplete?: Function,
@@ -74,7 +74,7 @@ export class History {
                 this.updateRoute(route)
                 onComplete && onComplete(route)
                 this.ensureURL()
-                
+
                 // fire ready cbs once
                 if (!this.ready) {
                     this.ready = true
@@ -96,7 +96,7 @@ export class History {
             }
         )
     }
-    
+
     confirmTransition (route: Route, onComplete: Function, onAbort?: Function) {
         const current = this.current
         const abort = err => {
@@ -124,12 +124,12 @@ export class History {
             this.ensureURL()
             return abort(new NavigationDuplicated(route))
         }
-        
+
         const { updated, deactivated, activated } = resolveQueue(
             this.current.matched,
             route.matched
         )
-        
+
         const queue: Array<?NavigationGuard> = [].concat(
             // in-component leave guards
             extractLeaveGuards(deactivated),
@@ -142,7 +142,7 @@ export class History {
             // async components
             resolveAsyncComponents(activated)
         )
-        
+
         this.pending = route
         const iterator = (hook: NavigationGuard, next) => {
             if (this.pending !== route) {
@@ -175,7 +175,7 @@ export class History {
                 abort(e)
             }
         }
-        
+
         runQueue(queue, iterator, () => {
             const postEnterCbs = []
             const isValid = () => this.current === route
@@ -199,7 +199,7 @@ export class History {
             })
         })
     }
-    
+
     updateRoute (route: Route) {
         const prev = this.current
         this.current = route

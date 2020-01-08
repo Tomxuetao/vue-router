@@ -18,11 +18,11 @@ export function createMatcher (
     router: VueRouter
 ): Matcher {
     const { pathList, pathMap, nameMap } = createRouteMap(routes)
-    
+
     function addRoutes (routes) {
         createRouteMap(routes, pathList, pathMap, nameMap)
     }
-    
+
     function match (
         raw: RawLocation,
         currentRoute?: Route,
@@ -30,7 +30,7 @@ export function createMatcher (
     ): Route {
         const location = normalizeLocation(raw, currentRoute, false, router)
         const { name } = location
-        
+
         if (name) {
             const record = nameMap[name]
             if (process.env.NODE_ENV !== 'production') {
@@ -40,11 +40,11 @@ export function createMatcher (
             const paramNames = record.regex.keys
                 .filter(key => !key.optional)
                 .map(key => key.name)
-            
+
             if (typeof location.params !== 'object') {
                 location.params = {}
             }
-            
+
             if (currentRoute && typeof currentRoute.params === 'object') {
                 for (const key in currentRoute.params) {
                     if (!(key in location.params) && paramNames.indexOf(key) > -1) {
@@ -52,7 +52,7 @@ export function createMatcher (
                     }
                 }
             }
-            
+
             location.path = fillParams(record.path, location.params, `named route "${name}"`)
             return _createRoute(record, location, redirectedFrom)
         } else if (location.path) {
@@ -68,7 +68,7 @@ export function createMatcher (
         // no match
         return _createRoute(null, location)
     }
-    
+
     function redirect (
         record: RouteRecord,
         location: Location
@@ -77,11 +77,11 @@ export function createMatcher (
         let redirect = typeof originalRedirect === 'function'
             ? originalRedirect(createRoute(record, location, null, router))
             : originalRedirect
-        
+
         if (typeof redirect === 'string') {
             redirect = { path: redirect }
         }
-        
+
         if (!redirect || typeof redirect !== 'object') {
             if (process.env.NODE_ENV !== 'production') {
                 warn(
@@ -90,14 +90,14 @@ export function createMatcher (
             }
             return _createRoute(null, location)
         }
-        
+
         const re: Object = redirect
         const { name, path } = re
         let { query, hash, params } = location
         query = re.hasOwnProperty('query') ? re.query : query
         hash = re.hasOwnProperty('hash') ? re.hash : hash
         params = re.hasOwnProperty('params') ? re.params : params
-        
+
         if (name) {
             // resolved named direct
             const targetRecord = nameMap[name]
@@ -130,7 +130,7 @@ export function createMatcher (
             return _createRoute(null, location)
         }
     }
-    
+
     function alias (
         record: RouteRecord,
         location: Location,
@@ -149,7 +149,7 @@ export function createMatcher (
         }
         return _createRoute(null, location)
     }
-    
+
     function _createRoute (
         record: ?RouteRecord,
         location: Location,
@@ -163,7 +163,7 @@ export function createMatcher (
         }
         return createRoute(record, location, redirectedFrom, router)
     }
-    
+
     return {
         match,
         addRoutes
@@ -176,13 +176,13 @@ function matchRoute (
     params: Object
 ): boolean {
     const m = path.match(regex)
-    
+
     if (!m) {
         return false
     } else if (!params) {
         return true
     }
-    
+
     for (let i = 1, len = m.length; i < len; ++i) {
         const key = regex.keys[i - 1]
         const val = typeof m[i] === 'string' ? decodeURIComponent(m[i]) : m[i]
@@ -191,7 +191,7 @@ function matchRoute (
             params[key.name || 'pathMatch'] = val
         }
     }
-    
+
     return true
 }
 

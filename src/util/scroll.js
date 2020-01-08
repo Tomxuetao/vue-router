@@ -32,16 +32,16 @@ export function handleScroll (
     if (!router.app) {
         return
     }
-    
+
     const behavior = router.options.scrollBehavior
     if (!behavior) {
         return
     }
-    
+
     if (process.env.NODE_ENV !== 'production') {
         assert(typeof behavior === 'function', `scrollBehavior must be a function`)
     }
-    
+
     // wait until re-render finishes before scrolling
     router.app.$nextTick(() => {
         const position = getScrollPosition()
@@ -51,11 +51,11 @@ export function handleScroll (
             from,
             isPop ? position : null
         )
-        
+
         if (!shouldScroll) {
             return
         }
-        
+
         if (typeof shouldScroll.then === 'function') {
             shouldScroll
                 .then(shouldScroll => {
@@ -131,7 +131,7 @@ function scrollToPosition (shouldScroll, position) {
         const el = hashStartsWithNumberRE.test(shouldScroll.selector) // $flow-disable-line
             ? document.getElementById(shouldScroll.selector.slice(1)) // $flow-disable-line
             : document.querySelector(shouldScroll.selector)
-        
+
         if (el) {
             let offset =
                 shouldScroll.offset && typeof shouldScroll.offset === 'object'
@@ -145,7 +145,7 @@ function scrollToPosition (shouldScroll, position) {
     } else if (isObject && isValidPosition(shouldScroll)) {
         position = normalizePosition(shouldScroll)
     }
-    
+
     if (position) {
         window.scrollTo(position.x, position.y)
     }

@@ -18,7 +18,7 @@ import type { Matcher } from './create-matcher'
 export default class VueRouter {
     static install: () => void;
     static version: string;
-    
+
     app: any;
     apps: Array<any>;
     ready: boolean;
@@ -31,7 +31,7 @@ export default class VueRouter {
     beforeHooks: Array<?NavigationGuard>;
     resolveHooks: Array<?NavigationGuard>;
     afterHooks: Array<?AfterNavigationHook>;
-    
+
     constructor (options: RouterOptions = {}) {
         this.app = null
         this.apps = []
@@ -40,7 +40,7 @@ export default class VueRouter {
         this.resolveHooks = []
         this.afterHooks = []
         this.matcher = createMatcher(options.routes || [], this)
-        
+
         let mode = options.mode || 'hash'
         this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
         if (this.fallback) {
@@ -50,24 +50,24 @@ export default class VueRouter {
             mode = 'abstract'
         }
         this.mode = mode
-        
+
         switch (mode) {
-            case 'history':
-                this.history = new HTML5History(this, options.base)
-                break
-            case 'hash':
-                this.history = new HashHistory(this, options.base, this.fallback)
-                break
-            case 'abstract':
-                this.history = new AbstractHistory(this, options.base)
-                break
-            default:
-                if (process.env.NODE_ENV !== 'production') {
-                    assert(false, `invalid mode: ${mode}`)
-                }
+        case 'history':
+            this.history = new HTML5History(this, options.base)
+            break
+        case 'hash':
+            this.history = new HashHistory(this, options.base, this.fallback)
+            break
+        case 'abstract':
+            this.history = new AbstractHistory(this, options.base)
+            break
+        default:
+            if (process.env.NODE_ENV !== 'production') {
+                assert(false, `invalid mode: ${mode}`)
+            }
         }
     }
-    
+
     match (
         raw: RawLocation,
         current?: Route,
@@ -75,20 +75,20 @@ export default class VueRouter {
     ): Route {
         return this.matcher.match(raw, current, redirectedFrom)
     }
-    
+
     get currentRoute (): ?Route {
         return this.history && this.history.current
     }
-    
+
     init (app: any /* Vue component instance */) {
         process.env.NODE_ENV !== 'production' && assert(
             install.installed,
             `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
             `before creating root instance.`
         )
-        
+
         this.apps.push(app)
-        
+
         // set up app destroyed handler
         // https://github.com/vuejs/vue-router/issues/2639
         app.$once('hook:destroyed', () => {
@@ -99,17 +99,17 @@ export default class VueRouter {
             // we do not release the router so it can be reused
             if (this.app === app) this.app = this.apps[0] || null
         })
-        
+
         // main app previously initialized
         // return as we don't need to set up new history listener
         if (this.app) {
             return
         }
-        
+
         this.app = app
-        
+
         const history = this.history
-        
+
         if (history instanceof HTML5History) {
             history.transitionTo(history.getCurrentLocation())
         } else if (history instanceof HashHistory) {
@@ -122,34 +122,34 @@ export default class VueRouter {
                 setupHashListener
             )
         }
-        
+
         history.listen(route => {
             this.apps.forEach((app) => {
                 app._route = route
             })
         })
     }
-    
+
     beforeEach (fn: Function): Function {
         return registerHook(this.beforeHooks, fn)
     }
-    
+
     beforeResolve (fn: Function): Function {
         return registerHook(this.resolveHooks, fn)
     }
-    
+
     afterEach (fn: Function): Function {
         return registerHook(this.afterHooks, fn)
     }
-    
+
     onReady (cb: Function, errorCb?: Function) {
         this.history.onReady(cb, errorCb)
     }
-    
+
     onError (errorCb: Function) {
         this.history.onError(errorCb)
     }
-    
+
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         // $flow-disable-line
         if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
@@ -160,7 +160,7 @@ export default class VueRouter {
             this.history.push(location, onComplete, onAbort)
         }
     }
-    
+
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         // $flow-disable-line
         if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
@@ -171,19 +171,19 @@ export default class VueRouter {
             this.history.replace(location, onComplete, onAbort)
         }
     }
-    
+
     go (n: number) {
         this.history.go(n)
     }
-    
+
     back () {
         this.go(-1)
     }
-    
+
     forward () {
         this.go(1)
     }
-    
+
     getMatchedComponents (to?: RawLocation | Route): Array<any> {
         const route: any = to
             ? to.matched
@@ -199,7 +199,7 @@ export default class VueRouter {
             })
         }))
     }
-    
+
     resolve (
         to: RawLocation,
         current?: Route,
@@ -232,7 +232,7 @@ export default class VueRouter {
             resolved: route
         }
     }
-    
+
     addRoutes (routes: Array<RouteConfig>) {
         this.matcher.addRoutes(routes)
         if (this.history.current !== START) {

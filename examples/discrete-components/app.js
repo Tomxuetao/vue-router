@@ -13,13 +13,13 @@ const Bar = { template: '<div>Component: bar</div>' }
 
 // 3. Create the router
 const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home },
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar }
-  ]
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home },
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar }
+    ]
 })
 
 // 4. Create extended base Vue with router injected here (all
@@ -31,7 +31,7 @@ const BaseVue = Vue.extend({ router })
 // per node); but the router should act as a singleton and keep all
 // instances in sync.
 Array.prototype.forEach.call(document.querySelectorAll('.app'), (node) => {
-  new BaseVue({
-    el: node
-  })
+    new BaseVue({
+        el: node
+    })
 })

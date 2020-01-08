@@ -8,7 +8,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
         let hasAsync = false
         let pending = 0
         let error = null
-        
+
         flatMapComponents(matched, (def, _, match, key) => {
             // if it's a function and doesn't have cid attached,
             // assume it's an async component resolve function.
@@ -18,7 +18,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
             if (typeof def === 'function' && def.cid === undefined) {
                 hasAsync = true
                 pending++
-                
+
                 const resolve = once(resolvedDef => {
                     if (isESModule(resolvedDef)) {
                         resolvedDef = resolvedDef.default
@@ -33,7 +33,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
                         next()
                     }
                 })
-                
+
                 const reject = once(reason => {
                     const msg = `Failed to resolve async component ${key}: ${reason}`
                     process.env.NODE_ENV !== 'production' && warn(false, msg)
@@ -44,7 +44,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
                         next(error)
                     }
                 })
-                
+
                 let res
                 try {
                     res = def(resolve, reject)
@@ -64,7 +64,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
                 }
             }
         })
-        
+
         if (!hasAsync) next()
     }
 }
