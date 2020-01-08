@@ -44,8 +44,7 @@
     "release": "bash scripts/release.sh"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged",
-    "commit-msg": "node scripts/verifyCommitMsg.js"
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,vue}": [
