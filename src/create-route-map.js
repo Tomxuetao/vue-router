@@ -4,6 +4,14 @@ import Regexp from 'path-to-regexp'
 import { cleanPath } from './util/path'
 import { assert, warn } from './util/warn'
 
+/**
+ * 通过用户配置的路由规则来创建对应的路由映射表
+ * @param routes
+ * @param oldPathList
+ * @param oldPathMap
+ * @param oldNameMap
+ * @returns {{nameMap: Dictionary<RouteRecord>, pathMap: Dictionary<RouteRecord>, pathList: Array<string>}}
+ */
 export function createRouteMap (routes: Array<RouteConfig>,
     oldPathList?: Array<string>,
     oldPathMap?: Dictionary<RouteRecord>,
@@ -12,6 +20,7 @@ export function createRouteMap (routes: Array<RouteConfig>,
     pathMap: Dictionary<RouteRecord>,
     nameMap: Dictionary<RouteRecord>
 } {
+    // 创建映射表
     // the path list is used to control path matching priority
     const pathList: Array<string> = oldPathList || []
     // $flow-disable-line
@@ -19,10 +28,12 @@ export function createRouteMap (routes: Array<RouteConfig>,
     // $flow-disable-line
     const nameMap: Dictionary<RouteRecord> = oldNameMap || Object.create(null)
 
+    // 遍历路由配置，为每个配置添加路由记录
     routes.forEach(route => {
         addRouteRecord(pathList, pathMap, nameMap, route)
     })
 
+    // 确保通配符在最后
     // ensure wildcard routes are always at the end
     for (let i = 0, l = pathList.length; i < l; i++) {
         if (pathList[i] === '*') {
@@ -51,12 +62,14 @@ export function createRouteMap (routes: Array<RouteConfig>,
     }
 }
 
+// 添加路由记录
 function addRouteRecord (pathList: Array<string>,
     pathMap: Dictionary<RouteRecord>,
     nameMap: Dictionary<RouteRecord>,
     route: RouteConfig,
     parent?: RouteRecord,
     matchAs?: string) {
+    // 获取路由配置下的属性
     const { path, name } = route
     if (process.env.NODE_ENV !== 'production') {
         assert(path != null, `"path" is required in a route configuration.`)
@@ -66,12 +79,14 @@ function addRouteRecord (pathList: Array<string>,
 
     const pathToRegexpOptions: PathToRegexpOptions =
         route.pathToRegexpOptions || {}
+    // 格式化url替换 /
     const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
 
     if (typeof route.caseSensitive === 'boolean') {
         pathToRegexpOptions.sensitive = route.caseSensitive
     }
 
+    // 生成路由记录
     const record: RouteRecord = {
         path: normalizedPath,
         regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
@@ -111,6 +126,7 @@ function addRouteRecord (pathList: Array<string>,
                     `links instead.`)
             }
         }
+        // 递归路由配置的children属性，添加路由记录
         route.children.forEach(child => {
             const childMatchAs = matchAs
                 ? cleanPath(`${matchAs}/${child.path}`)
@@ -119,11 +135,13 @@ function addRouteRecord (pathList: Array<string>,
         })
     }
 
+    // 更新映射表
     if (!pathMap[record.path]) {
         pathList.push(record.path)
         pathMap[record.path] = record
     }
 
+    // 如果路由有别名，给别名添加路由记录
     if (route.alias !== undefined) {
         const aliases = Array.isArray(route.alias) ? route.alias : [route.alias]
         for (let i = 0; i < aliases.length; ++i) {
@@ -149,6 +167,7 @@ function addRouteRecord (pathList: Array<string>,
         }
     }
 
+    // 命名路由，添加记录
     if (name) {
         if (!nameMap[name]) {
             nameMap[name] = record

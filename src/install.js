@@ -3,10 +3,17 @@ import Link from './components/link'
 
 export let _Vue
 
+/**
+ * 对于路由注册来说，核心就是调用 Vue.use(VueRouter)，使得 VueRouter 可以使用 Vue。
+ * 然后通过 Vue 来调用 VueRouter 的 install 函数。在该函数中，核心就是给组件混入钩子函数和全局注册两个路由组件。
+ * @param Vue
+ * @returns {beforeCreate.$options.router|VueRouter}
+ */
 export function install (Vue) {
+    // 确保install调用一次
     if (install.installed && _Vue === Vue) return
     install.installed = true
-
+    // 把Vue赋值给全局变量
     _Vue = Vue
 
     const isDef = v => v !== undefined
@@ -18,14 +25,23 @@ export function install (Vue) {
         }
     }
 
+    /**
+     * 给每个组件的钩子函数混入实现
+     * 可以发现在 `beforeCreate` 钩子执行时，会初始化路由
+     */
     Vue.mixin({
+        // 只有根组件有router属性，所以根组件初始化时会初始化路由
         beforeCreate () {
             if (isDef(this.$options.router)) {
+                // 跟路由设置成自己
                 this._routerRoot = this
                 this._router = this.$options.router
+                // 初始化路由
                 this._router.init(this)
+                // 为_route实现双向绑定，触发组件渲染
                 Vue.util.defineReactive(this, '_route', this._router.history.current)
             } else {
+                // 用于router-view层级判断
                 this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
             }
             registerInstance(this, this)
@@ -47,6 +63,7 @@ export function install (Vue) {
         }
     })
 
+    // 全局注册组件router-view、router-link
     Vue.component('RouterView', View)
     Vue.component('RouterLink', Link)
 

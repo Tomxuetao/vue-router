@@ -15,6 +15,9 @@ import { AbstractHistory } from './history/abstract'
 
 import type { Matcher } from './create-matcher'
 
+/**
+ * 在实例化 VueRouter 的过程中，核心是创建一个路由匹配对象，并且根据 mode 来采取不同的路由方式。
+ */
 export default class VueRouter {
     static install: () => void;
     static version: string;
@@ -39,8 +42,10 @@ export default class VueRouter {
         this.beforeHooks = []
         this.resolveHooks = []
         this.afterHooks = []
+        // 路由匹配对象
         this.matcher = createMatcher(options.routes || [], this)
 
+        // 根据mode采取不同路由方法
         let mode = options.mode || 'hash'
         this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
         if (this.fallback) {
@@ -68,6 +73,7 @@ export default class VueRouter {
         }
     }
 
+    // 匹配路由信息
     match (raw: RawLocation,
         current?: Route,
         redirectedFrom?: Location): Route {
@@ -83,6 +89,7 @@ export default class VueRouter {
             `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
             `before creating root instance.`)
 
+        // 保存组件实例
         this.apps.push(app)
 
         // set up app destroyed handler
@@ -98,25 +105,31 @@ export default class VueRouter {
 
         // main app previously initialized
         // return as we don't need to set up new history listener
+        // 如果根组件存在直接返回
         if (this.app) {
             return
         }
 
         this.app = app
 
+        // 赋值路由模式
         const history = this.history
 
+        // 判断路由模式
         if (history instanceof HTML5History) {
             history.transitionTo(history.getCurrentLocation())
         } else if (history instanceof HashHistory) {
+            // 添加hashchange监听
             const setupHashListener = () => {
                 history.setupListeners()
             }
+            // 路由跳转
             history.transitionTo(history.getCurrentLocation(),
                 setupHashListener,
                 setupHashListener)
         }
 
+        // 该回调会在transitionTo中调用，对组件的_route属性进行赋值，触发组件渲染
         history.listen(route => {
             this.apps.forEach((app) => {
                 app._route = route

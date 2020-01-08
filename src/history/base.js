@@ -62,17 +62,25 @@ export class History {
         this.errorCbs.push(errorCb)
     }
 
+    // 路由跳转
     transitionTo (location: RawLocation,
         onComplete?: Function,
         onAbort?: Function) {
+        // 获取路由信息
         const route = this.router.match(location, this.current)
+        // 确认切换路由
         this.confirmTransition(route,
+            // 切换成功回调
             () => {
+                // 更新路由信息，对组件的 _route 属性进行赋值，触发组件渲染。调用 afterHooks 中的钩子函数
                 this.updateRoute(route)
+                // 添加hashchange监听
                 onComplete && onComplete(route)
+                // 更新url
                 this.ensureURL()
 
                 // fire ready cbs once
+                // 只执行一次ready回调
                 if (!this.ready) {
                     this.ready = true
                     this.readyCbs.forEach(cb => {
@@ -80,6 +88,7 @@ export class History {
                     })
                 }
             },
+            // 切换失败回调
             err => {
                 if (onAbort) {
                     onAbort(err)

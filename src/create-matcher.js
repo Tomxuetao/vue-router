@@ -13,13 +13,23 @@ export type Matcher = {
     addRoutes: (routes: Array<RouteConfig>) => void;
 };
 
+/**
+ * createMatcher 函数的作用就是创建路由映射表，
+ * 然后通过闭包的方式让 addRoutes 和 match函数能够使用路由映射表的几个对象，
+ * 最后返回一个 Matcher 对象。
+ * @param routes
+ * @param router
+ * @returns {{match: match, addRoutes: addRoutes}}
+ */
 export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): Matcher {
+    // 创建路由映射表
     const { pathList, pathMap, nameMap } = createRouteMap(routes)
 
     function addRoutes (routes) {
         createRouteMap(routes, pathList, pathMap, nameMap)
     }
 
+    // 路由匹配
     function match (raw: RawLocation, currentRoute?: Route, redirectedFrom?: Location): Route {
         const location = normalizeLocation(raw, currentRoute, false, router)
         const { name } = location
