@@ -43,11 +43,7 @@ if (args.indexOf('-c') < 0) {
     // requires to explicitely provide the conf
     const envs = args[args.indexOf('-e') + 1]
     if (envs && envs.indexOf(',') > -1) {
-        console.warn(
-            `Specify the conf when providing multiple browsers:\n$ yarn run test:e2e ${args.join(
-                ' '
-            )} -c ${NW_CONFIG}`
-        )
+        console.warn(`Specify the conf when providing multiple browsers:\n$ yarn run test:e2e ${args.join(' ')} -c ${NW_CONFIG}`)
         process.exit(1)
     }
 } else if (isLocal) {
@@ -75,19 +71,15 @@ function adaptArgv (argv) {
     // process.exit(0)
 }
 
-process.mainModule.filename = resolve(
-    __dirname,
-    '../../node_modules/.bin/nightwatch'
-)
+process.mainModule.filename = resolve(__dirname,
+    '../../node_modules/.bin/nightwatch')
 
 if (isLocal) {
     if (isLocal && (!process.env.BS_USER || !process.env.BS_KEY)) {
-        console.log(
-            'Hey!\n',
+        console.log('Hey!\n',
             'You are missing credentials for Browserstack.\n',
             'If you are a contributor, this is normal, credentials are private. These tests must be run by a maintainer of vue-router',
-            'If you are a maintainer, make sure to create your `.env` file with both `BS_USER` and `BS_KEY` variables!'
-        )
+            'If you are a maintainer, make sure to create your `.env` file with both `BS_USER` and `BS_KEY` variables!')
         // fail if testing locally
         process.exit(process.env.CI ? 0 : 1)
     }

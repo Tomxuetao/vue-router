@@ -22,13 +22,11 @@ module.exports = {
                 window.history.back()
             })
             .assert.containsText('.view', 'home')
-            .assert.evaluate(
-                function () {
-                    return window.pageYOffset === 100
-                },
-                null,
-                'restore scroll position on back'
-            )
+            .assert.evaluate(function () {
+                return window.pageYOffset === 100
+            },
+            null,
+            'restore scroll position on back')
 
         // scroll on a popped entry
             .execute(function () {
@@ -36,56 +34,46 @@ module.exports = {
                 window.history.forward()
             })
             .assert.containsText('.view', 'foo')
-            .assert.evaluate(
-                function () {
-                    return window.pageYOffset === 200
-                },
-                null,
-                'restore scroll position on forward'
-            )
+            .assert.evaluate(function () {
+                return window.pageYOffset === 200
+            },
+            null,
+            'restore scroll position on forward')
 
             .execute(function () {
                 window.history.back()
             })
             .assert.containsText('.view', 'home')
-            .assert.evaluate(
-                function () {
-                    return window.pageYOffset === 50
-                },
-                null,
-                'restore scroll position on back again'
-            )
+            .assert.evaluate(function () {
+                return window.pageYOffset === 50
+            },
+            null,
+            'restore scroll position on back again')
 
             .click('li:nth-child(3) a')
-            .assert.evaluate(
-                function () {
-                    return window.pageYOffset === 0
-                },
-                null,
-                'scroll to top on new entry'
-            )
+            .assert.evaluate(function () {
+                return window.pageYOffset === 0
+            },
+            null,
+            'scroll to top on new entry')
 
             .click('li:nth-child(4) a')
-            .assert.evaluate(
-                function () {
-                    return document.getElementById('anchor').getBoundingClientRect().top < 1
-                },
-                null,
-                'scroll to anchor'
-            )
+            .assert.evaluate(function () {
+                return document.getElementById('anchor').getBoundingClientRect().top < 1
+            },
+            null,
+            'scroll to anchor')
 
         // scroll back to top so we can click the butotn
             .execute(function () {
                 window.scrollTo(0, 0)
             })
             .click('li:nth-child(5) a')
-            .assert.evaluate(
-                function () {
-                    return document.getElementById('anchor2').getBoundingClientRect().top < 101
-                },
-                null,
-                'scroll to anchor with offset'
-            )
+            .assert.evaluate(function () {
+                return document.getElementById('anchor2').getBoundingClientRect().top < 101
+            },
+            null,
+            'scroll to anchor with offset')
             .end()
     }
 }

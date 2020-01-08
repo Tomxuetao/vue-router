@@ -13,21 +13,14 @@ export type Matcher = {
     addRoutes: (routes: Array<RouteConfig>) => void;
 };
 
-export function createMatcher (
-    routes: Array<RouteConfig>,
-    router: VueRouter
-): Matcher {
+export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): Matcher {
     const { pathList, pathMap, nameMap } = createRouteMap(routes)
 
     function addRoutes (routes) {
         createRouteMap(routes, pathList, pathMap, nameMap)
     }
 
-    function match (
-        raw: RawLocation,
-        currentRoute?: Route,
-        redirectedFrom?: Location
-    ): Route {
+    function match (raw: RawLocation, currentRoute?: Route, redirectedFrom?: Location): Route {
         const location = normalizeLocation(raw, currentRoute, false, router)
         const { name } = location
 
@@ -69,10 +62,8 @@ export function createMatcher (
         return _createRoute(null, location)
     }
 
-    function redirect (
-        record: RouteRecord,
-        location: Location
-    ): Route {
+    function redirect (record: RouteRecord,
+        location: Location): Route {
         const originalRedirect = record.redirect
         let redirect = typeof originalRedirect === 'function'
             ? originalRedirect(createRoute(record, location, null, router))
@@ -84,9 +75,7 @@ export function createMatcher (
 
         if (!redirect || typeof redirect !== 'object') {
             if (process.env.NODE_ENV !== 'production') {
-                warn(
-                    false, `invalid redirect option: ${JSON.stringify(redirect)}`
-                )
+                warn(false, `invalid redirect option: ${JSON.stringify(redirect)}`)
             }
             return _createRoute(null, location)
         }
@@ -131,11 +120,7 @@ export function createMatcher (
         }
     }
 
-    function alias (
-        record: RouteRecord,
-        location: Location,
-        matchAs: string
-    ): Route {
+    function alias (record: RouteRecord, location: Location, matchAs: string): Route {
         const aliasedPath = fillParams(matchAs, location.params, `aliased route with path "${matchAs}"`)
         const aliasedMatch = match({
             _normalized: true,
@@ -150,11 +135,7 @@ export function createMatcher (
         return _createRoute(null, location)
     }
 
-    function _createRoute (
-        record: ?RouteRecord,
-        location: Location,
-        redirectedFrom?: Location
-    ): Route {
+    function _createRoute (record: ?RouteRecord, location: Location, redirectedFrom?: Location): Route {
         if (record && record.redirect) {
             return redirect(record, redirectedFrom || location)
         }
@@ -170,11 +151,7 @@ export function createMatcher (
     }
 }
 
-function matchRoute (
-    regex: RouteRegExp,
-    path: string,
-    params: Object
-): boolean {
+function matchRoute (regex: RouteRegExp, path: string, params: Object): boolean {
     const m = path.match(regex)
 
     if (!m) {

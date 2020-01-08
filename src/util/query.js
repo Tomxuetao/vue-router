@@ -15,11 +15,9 @@ const encode = str => encodeURIComponent(str)
 
 const decode = decodeURIComponent
 
-export function resolveQuery (
-    query: ?string,
+export function resolveQuery (query: ?string,
     extraQuery: Dictionary<string> = {},
-    _parseQuery: ?Function
-): Dictionary<string> {
+    _parseQuery: ?Function): Dictionary<string> {
     const parse = _parseQuery || parseQuery
     let parsedQuery
     try {

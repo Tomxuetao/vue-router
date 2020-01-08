@@ -68,11 +68,9 @@ export default class VueRouter {
         }
     }
 
-    match (
-        raw: RawLocation,
+    match (raw: RawLocation,
         current?: Route,
-        redirectedFrom?: Location
-    ): Route {
+        redirectedFrom?: Location): Route {
         return this.matcher.match(raw, current, redirectedFrom)
     }
 
@@ -81,11 +79,9 @@ export default class VueRouter {
     }
 
     init (app: any /* Vue component instance */) {
-        process.env.NODE_ENV !== 'production' && assert(
-            install.installed,
+        process.env.NODE_ENV !== 'production' && assert(install.installed,
             `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
-            `before creating root instance.`
-        )
+            `before creating root instance.`)
 
         this.apps.push(app)
 
@@ -116,11 +112,9 @@ export default class VueRouter {
             const setupHashListener = () => {
                 history.setupListeners()
             }
-            history.transitionTo(
-                history.getCurrentLocation(),
+            history.transitionTo(history.getCurrentLocation(),
                 setupHashListener,
-                setupHashListener
-            )
+                setupHashListener)
         }
 
         history.listen(route => {
@@ -200,11 +194,9 @@ export default class VueRouter {
         }))
     }
 
-    resolve (
-        to: RawLocation,
+    resolve (to: RawLocation,
         current?: Route,
-        append?: boolean
-    ): {
+        append?: boolean): {
         location: Location,
         route: Route,
         href: string,
@@ -213,12 +205,10 @@ export default class VueRouter {
         resolved: Route
     } {
         current = current || this.history.current
-        const location = normalizeLocation(
-            to,
+        const location = normalizeLocation(to,
             current,
             append,
-            this
-        )
+            this)
         const route = this.match(location, current)
         const fullPath = route.redirectedFrom || route.fullPath
         const base = this.history.base

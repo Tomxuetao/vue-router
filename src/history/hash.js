@@ -28,8 +28,7 @@ export class HashHistory extends History {
             setupScroll()
         }
 
-        window.addEventListener(
-            supportsPushState ? 'popstate' : 'hashchange',
+        window.addEventListener(supportsPushState ? 'popstate' : 'hashchange',
             () => {
                 const current = this.current
                 if (!ensureSlash()) {
@@ -43,34 +42,29 @@ export class HashHistory extends History {
                         replaceHash(route.fullPath)
                     }
                 })
-            }
-        )
+            })
     }
 
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
-        this.transitionTo(
-            location,
+        this.transitionTo(location,
             route => {
                 pushHash(route.fullPath)
                 handleScroll(this.router, route, fromRoute, false)
                 onComplete && onComplete(route)
             },
-            onAbort
-        )
+            onAbort)
     }
 
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
-        this.transitionTo(
-            location,
+        this.transitionTo(location,
             route => {
                 replaceHash(route.fullPath)
                 handleScroll(this.router, route, fromRoute, false)
                 onComplete && onComplete(route)
             },
-            onAbort
-        )
+            onAbort)
     }
 
     go (n: number) {

@@ -57,8 +57,7 @@ module.exports = function sendStatus () {
                 const reason = results.lastError.message
                 console.log('Found failed test', reason)
                 axios
-                    .put(
-                        `https://api.browserstack.com/automate/sessions/${sessionId}.json`,
+                    .put(`https://api.browserstack.com/automate/sessions/${sessionId}.json`,
                         {
                             // change the name so it's easier to find
                             name: key,
@@ -70,8 +69,7 @@ module.exports = function sendStatus () {
                                 username: BS_USER,
                                 password: BS_KEY
                             }
-                        }
-                    )
+                        })
                     .catch(err => {
                         console.log('❌ Failed changing status for sessions', err)
                     })

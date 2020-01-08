@@ -5,12 +5,10 @@ import { stringifyQuery } from './query'
 
 const trailingSlashRE = /\/?$/
 
-export function createRoute (
-    record: ?RouteRecord,
+export function createRoute (record: ?RouteRecord,
     location: Location,
     redirectedFrom?: ?Location,
-    router?: VueRouter
-): Route {
+    router?: VueRouter): Route {
     const stringifyQuery = router && router.options.stringifyQuery
 
     let query: any = location.query || {}
@@ -63,10 +61,8 @@ function formatMatch (record: ?RouteRecord): Array<RouteRecord> {
     return res
 }
 
-function getFullPath (
-    { path, query = {}, hash = '' },
-    _stringifyQuery
-): string {
+function getFullPath ({ path, query = {}, hash = '' },
+    _stringifyQuery): string {
     const stringify = _stringifyQuery || stringifyQuery
     return (path || '/') + stringify(query) + hash
 }
@@ -115,9 +111,7 @@ function isObjectEqual (a = {}, b = {}): boolean {
 
 export function isIncludedRoute (current: Route, target: Route): boolean {
     return (
-        current.path.replace(trailingSlashRE, '/').indexOf(
-            target.path.replace(trailingSlashRE, '/')
-        ) === 0 &&
+        current.path.replace(trailingSlashRE, '/').indexOf(target.path.replace(trailingSlashRE, '/')) === 0 &&
         (!target.hash || current.hash === target.hash) &&
         queryIncludes(current.query, target.query)
     )

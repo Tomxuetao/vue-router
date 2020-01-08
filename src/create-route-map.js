@@ -4,12 +4,10 @@ import Regexp from 'path-to-regexp'
 import { cleanPath } from './util/path'
 import { assert, warn } from './util/warn'
 
-export function createRouteMap (
-    routes: Array<RouteConfig>,
+export function createRouteMap (routes: Array<RouteConfig>,
     oldPathList?: Array<string>,
     oldPathMap?: Dictionary<RouteRecord>,
-    oldNameMap?: Dictionary<RouteRecord>
-): {
+    oldNameMap?: Dictionary<RouteRecord>): {
     pathList: Array<string>,
     pathMap: Dictionary<RouteRecord>,
     nameMap: Dictionary<RouteRecord>
@@ -53,23 +51,17 @@ export function createRouteMap (
     }
 }
 
-function addRouteRecord (
-    pathList: Array<string>,
+function addRouteRecord (pathList: Array<string>,
     pathMap: Dictionary<RouteRecord>,
     nameMap: Dictionary<RouteRecord>,
     route: RouteConfig,
     parent?: RouteRecord,
-    matchAs?: string
-) {
+    matchAs?: string) {
     const { path, name } = route
     if (process.env.NODE_ENV !== 'production') {
         assert(path != null, `"path" is required in a route configuration.`)
-        assert(
-            typeof route.component !== 'string',
-            `route config "component" for path: ${String(
-                path || name
-            )} cannot be a ` + `string id. Use an actual component instead.`
-        )
+        assert(typeof route.component !== 'string',
+            `route config "component" for path: ${String(path || name)} cannot be a ` + `string id. Use an actual component instead.`)
     }
 
     const pathToRegexpOptions: PathToRegexpOptions =
@@ -109,16 +101,14 @@ function addRouteRecord (
                 !route.redirect &&
                 route.children.some(child => /^\/?$/.test(child.path))
             ) {
-                warn(
-                    false,
+                warn(false,
                     `Named Route '${route.name}' has a default child route. ` +
                     `When navigating to this named route (:to="{name: '${
                         route.name
                     }'"), ` +
                     `the default child route will not be rendered. Remove the name from ` +
                     `this route and use the name of the default child route for named ` +
-                    `links instead.`
-                )
+                    `links instead.`)
             }
         }
         route.children.forEach(child => {
@@ -139,10 +129,8 @@ function addRouteRecord (
         for (let i = 0; i < aliases.length; ++i) {
             const alias = aliases[i]
             if (process.env.NODE_ENV !== 'production' && alias === path) {
-                warn(
-                    false,
-                    `Found an alias with the same value as the path: "${path}". You have to remove that alias. It will be ignored in development.`
-                )
+                warn(false,
+                    `Found an alias with the same value as the path: "${path}". You have to remove that alias. It will be ignored in development.`)
                 // skip in dev to make it work
                 continue
             }
@@ -151,8 +139,7 @@ function addRouteRecord (
                 path: alias,
                 children: route.children
             }
-            addRouteRecord(
-                pathList,
+            addRouteRecord(pathList,
                 pathMap,
                 nameMap,
                 aliasRoute,
@@ -166,38 +153,30 @@ function addRouteRecord (
         if (!nameMap[name]) {
             nameMap[name] = record
         } else if (process.env.NODE_ENV !== 'production' && !matchAs) {
-            warn(
-                false,
+            warn(false,
                 `Duplicate named routes definition: ` +
-                `{ name: "${name}", path: "${record.path}" }`
-            )
+                `{ name: "${name}", path: "${record.path}" }`)
         }
     }
 }
 
-function compileRouteRegex (
-    path: string,
-    pathToRegexpOptions: PathToRegexpOptions
-): RouteRegExp {
+function compileRouteRegex (path: string,
+    pathToRegexpOptions: PathToRegexpOptions): RouteRegExp {
     const regex = Regexp(path, [], pathToRegexpOptions)
     if (process.env.NODE_ENV !== 'production') {
         const keys: any = Object.create(null)
         regex.keys.forEach(key => {
-            warn(
-                !keys[key.name],
-                `Duplicate param keys in route with path: "${path}"`
-            )
+            warn(!keys[key.name],
+                `Duplicate param keys in route with path: "${path}"`)
             keys[key.name] = true
         })
     }
     return regex
 }
 
-function normalizePath (
-    path: string,
+function normalizePath (path: string,
     parent?: RouteRecord,
-    strict?: boolean
-): string {
+    strict?: boolean): string {
     if (!strict) path = path.replace(/\/$/, '')
     if (path[0] === '/') return path
     if (parent == null) return path

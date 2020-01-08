@@ -1,10 +1,8 @@
 /* @flow */
 
-export function resolvePath (
-    relative: string,
+export function resolvePath (relative: string,
     base: string,
-    append?: boolean
-): string {
+    append?: boolean): string {
     const firstChar = relative.charAt(0)
     if (firstChar === '/') {
         return relative

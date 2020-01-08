@@ -62,14 +62,11 @@ export class History {
         this.errorCbs.push(errorCb)
     }
 
-    transitionTo (
-        location: RawLocation,
+    transitionTo (location: RawLocation,
         onComplete?: Function,
-        onAbort?: Function
-    ) {
+        onAbort?: Function) {
         const route = this.router.match(location, this.current)
-        this.confirmTransition(
-            route,
+        this.confirmTransition(route,
             () => {
                 this.updateRoute(route)
                 onComplete && onComplete(route)
@@ -93,8 +90,7 @@ export class History {
                         cb(err)
                     })
                 }
-            }
-        )
+            })
     }
 
     confirmTransition (route: Route, onComplete: Function, onAbort?: Function) {
@@ -125,10 +121,8 @@ export class History {
             return abort(new NavigationDuplicated(route))
         }
 
-        const { updated, deactivated, activated } = resolveQueue(
-            this.current.matched,
-            route.matched
-        )
+        const { updated, deactivated, activated } = resolveQueue(this.current.matched,
+            route.matched)
 
         const queue: Array<?NavigationGuard> = [].concat(
             // in-component leave guards
@@ -140,8 +134,7 @@ export class History {
             // in-config enter guards
             activated.map(m => m.beforeEnter),
             // async components
-            resolveAsyncComponents(activated)
-        )
+            resolveAsyncComponents(activated))
 
         this.pending = route
         const iterator = (hook: NavigationGuard, next) => {
@@ -230,10 +223,8 @@ function normalizeBase (base: ?string): string {
     return base.replace(/\/$/, '')
 }
 
-function resolveQueue (
-    current: Array<RouteRecord>,
-    next: Array<RouteRecord>
-): {
+function resolveQueue (current: Array<RouteRecord>,
+    next: Array<RouteRecord>): {
     updated: Array<RouteRecord>,
     activated: Array<RouteRecord>,
     deactivated: Array<RouteRecord>
@@ -252,12 +243,10 @@ function resolveQueue (
     }
 }
 
-function extractGuards (
-    records: Array<RouteRecord>,
+function extractGuards (records: Array<RouteRecord>,
     name: string,
     bind: Function,
-    reverse?: boolean
-): Array<?Function> {
+    reverse?: boolean): Array<?Function> {
     const guards = flatMapComponents(records, (def, instance, match, key) => {
         const guard = extractGuard(def, name)
         if (guard) {
@@ -269,10 +258,8 @@ function extractGuards (
     return flatten(reverse ? guards.reverse() : guards)
 }
 
-function extractGuard (
-    def: Object | Function,
-    key: string
-): NavigationGuard | Array<NavigationGuard> {
+function extractGuard (def: Object | Function,
+    key: string): NavigationGuard | Array<NavigationGuard> {
     if (typeof def !== 'function') {
         // extend now so that global mixins are applied.
         def = _Vue.extend(def)
@@ -296,27 +283,21 @@ function bindGuard (guard: NavigationGuard, instance: ?_Vue): ?NavigationGuard {
     }
 }
 
-function extractEnterGuards (
-    activated: Array<RouteRecord>,
+function extractEnterGuards (activated: Array<RouteRecord>,
     cbs: Array<Function>,
-    isValid: () => boolean
-): Array<?Function> {
-    return extractGuards(
-        activated,
+    isValid: () => boolean): Array<?Function> {
+    return extractGuards(activated,
         'beforeRouteEnter',
         (guard, _, match, key) => {
             return bindEnterGuard(guard, match, key, cbs, isValid)
-        }
-    )
+        })
 }
 
-function bindEnterGuard (
-    guard: NavigationGuard,
+function bindEnterGuard (guard: NavigationGuard,
     match: RouteRecord,
     key: string,
     cbs: Array<Function>,
-    isValid: () => boolean
-): NavigationGuard {
+    isValid: () => boolean): NavigationGuard {
     return function routeEnterGuard (to, from, next) {
         return guard(to, from, cb => {
             if (typeof cb === 'function') {
@@ -334,12 +315,10 @@ function bindEnterGuard (
     }
 }
 
-function poll (
-    cb: any, // somehow flow cannot infer this is a function
+function poll (cb: any, // somehow flow cannot infer this is a function
     instances: Object,
     key: string,
-    isValid: () => boolean
-) {
+    isValid: () => boolean) {
     if (
         instances[key] &&
         !instances[key]._isBeingDestroyed // do not reuse being destroyed instance

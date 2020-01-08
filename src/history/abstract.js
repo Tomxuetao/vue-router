@@ -16,26 +16,22 @@ export class AbstractHistory extends History {
     }
 
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
-        this.transitionTo(
-            location,
+        this.transitionTo(location,
             route => {
                 this.stack = this.stack.slice(0, this.index + 1).concat(route)
                 this.index++
                 onComplete && onComplete(route)
             },
-            onAbort
-        )
+            onAbort)
     }
 
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
-        this.transitionTo(
-            location,
+        this.transitionTo(location,
             route => {
                 this.stack = this.stack.slice(0, this.index).concat(route)
                 onComplete && onComplete(route)
             },
-            onAbort
-        )
+            onAbort)
     }
 
     go (n: number) {
@@ -44,8 +40,7 @@ export class AbstractHistory extends History {
             return
         }
         const route = this.stack[targetIndex]
-        this.confirmTransition(
-            route,
+        this.confirmTransition(route,
             () => {
                 this.index = targetIndex
                 this.updateRoute(route)
@@ -54,8 +49,7 @@ export class AbstractHistory extends History {
                 if (isExtendedError(NavigationDuplicated, err)) {
                     this.index = targetIndex
                 }
-            }
-        )
+            })
     }
 
     getCurrentLocation () {

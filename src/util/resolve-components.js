@@ -69,16 +69,12 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
     }
 }
 
-export function flatMapComponents (
-    matched: Array<RouteRecord>,
-    fn: Function
-): Array<?Function> {
+export function flatMapComponents (matched: Array<RouteRecord>,
+    fn: Function): Array<?Function> {
     return flatten(matched.map(m => {
-        return Object.keys(m.components).map(key => fn(
-            m.components[key],
+        return Object.keys(m.components).map(key => fn(m.components[key],
             m.instances[key],
-            m, key
-        ))
+            m, key))
     }))
 }
 

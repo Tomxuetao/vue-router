@@ -35,24 +35,24 @@ module.exports = {
             .assert.urlEquals('http://localhost:8080/hash-mode/#/bar')
             .assert.containsText('.view', 'bar')
 
-        // check initial visit
+            // check initial visit
             .url('http://localhost:8080/hash-mode/#/foo')
             .waitForElementVisible('#app', 1000)
             .assert.containsText('.view', 'foo')
-        // direct visit encoded unicode
+            // direct visit encoded unicode
             .url('http://localhost:8080/hash-mode/#/%C3%A9')
             .waitForElementVisible('#app', 1000)
             .assert.containsText('.view', 'unicode')
-        // direct visit raw unicode
+            // direct visit raw unicode
             .url('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1')
             .waitForElementVisible('#app', 1000)
             .assert.containsText('.view', 'unicode: ñ')
-        //  Doesn't seem to work on PhantomJS
-        // .click('li:nth-child(7)')
-        // .assert.urlEquals('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1?t=%25')
-        // .assert.containsText('.view', 'unicode: ñ')
-        // .assert.containsText('#query-t', '%')
-        // direct visit
+            //  Doesn't seem to work on PhantomJS
+            // .click('li:nth-child(7)')
+            // .assert.urlEquals('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1?t=%25')
+            // .assert.containsText('.view', 'unicode: ñ')
+            // .assert.containsText('#query-t', '%')
+            // direct visit
             .url('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1?t=%25')
             .waitForElementVisible('#app', 1000)
             .assert.containsText('.view', 'unicode: ñ')

@@ -76,9 +76,7 @@ describe('Creating Route Map', function () {
         process.env.NODE_ENV = 'development'
         maps = createRouteMap(routes)
         expect(console.warn).toHaveBeenCalledTimes(1)
-        expect(console.warn.calls.argsFor(0)[0]).toMatch(
-            "vue-router] Named Route 'bar'"
-        )
+        expect(console.warn.calls.argsFor(0)[0]).toMatch("vue-router] Named Route 'bar'")
     })
 
     it('in development, throws if path is missing', function () {
@@ -103,9 +101,7 @@ describe('Creating Route Map', function () {
             }
         ])
         expect(console.warn).toHaveBeenCalled()
-        expect(console.warn.calls.argsFor(0)[0]).toMatch(
-            'vue-router] Duplicate param keys in route with path: "/foo/:id/bar/:id"'
-        )
+        expect(console.warn.calls.argsFor(0)[0]).toMatch('vue-router] Duplicate param keys in route with path: "/foo/:id/bar/:id"')
     })
 
     it('in development, warns about alias and path having the same value', () => {
@@ -118,9 +114,7 @@ describe('Creating Route Map', function () {
             }
         ])
         expect(console.warn).toHaveBeenCalled()
-        expect(console.warn.calls.argsFor(0)[0]).toMatch(
-            'vue-router] Found an alias with the same value as the path: "/foo-alias"'
-        )
+        expect(console.warn.calls.argsFor(0)[0]).toMatch('vue-router] Found an alias with the same value as the path: "/foo-alias"')
     })
 
     it('in development, warns about one alias (in an array) having the same value as the path', () => {
@@ -133,9 +127,7 @@ describe('Creating Route Map', function () {
             }
         ])
         expect(console.warn).toHaveBeenCalled()
-        expect(console.warn.calls.argsFor(0)[0]).toMatch(
-            'vue-router] Found an alias with the same value as the path: "/foo-alias"'
-        )
+        expect(console.warn.calls.argsFor(0)[0]).toMatch('vue-router] Found an alias with the same value as the path: "/foo-alias"')
     })
 
     it('in development, warn if a path is missing a leading slash', function () {

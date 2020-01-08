@@ -114,11 +114,9 @@ function resolveProps (route, config) {
         return config ? route.params : undefined
     default:
         if (process.env.NODE_ENV !== 'production') {
-            warn(
-                false,
+            warn(false,
                 `props in "${route.path}" is a ${typeof config}, ` +
-                    `expecting an object, function or boolean.`
-            )
+                    `expecting an object, function or boolean.`)
         }
     }
 }

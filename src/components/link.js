@@ -36,11 +36,9 @@ export default {
     render (h: Function) {
         const router = this.$router
         const current = this.$route
-        const { location, route, href } = router.resolve(
-            this.to,
+        const { location, route, href } = router.resolve(this.to,
             current,
-            this.append
-        )
+            this.append)
 
         const classes = {}
         const globalActiveClass = router.options.linkActiveClass
@@ -105,12 +103,10 @@ export default {
                 return scopedSlot[0]
             } else if (scopedSlot.length > 1 || !scopedSlot.length) {
                 if (process.env.NODE_ENV !== 'production') {
-                    warn(
-                        false,
+                    warn(false,
                         `RouterLink with to="${
                             this.props.to
-                        }" is trying to use a scoped slot but it didn't provide exactly one child.`
-                    )
+                        }" is trying to use a scoped slot but it didn't provide exactly one child.`)
                 }
                 return scopedSlot.length === 0 ? h() : h('span', {}, scopedSlot)
             }

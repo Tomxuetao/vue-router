@@ -8,11 +8,9 @@ const regexpCompileCache: {
     [key: string]: Function
 } = Object.create(null)
 
-export function fillParams (
-    path: string,
+export function fillParams (path: string,
     params: ?Object,
-    routeMsg: string
-): string {
+    routeMsg: string): string {
     params = params || {}
     try {
         const filler =
