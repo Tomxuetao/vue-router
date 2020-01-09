@@ -63,12 +63,7 @@ export function createRouteMap (routes: Array<RouteConfig>,
 }
 
 // 添加路由记录
-function addRouteRecord (pathList: Array<string>,
-    pathMap: Dictionary<RouteRecord>,
-    nameMap: Dictionary<RouteRecord>,
-    route: RouteConfig,
-    parent?: RouteRecord,
-    matchAs?: string) {
+function addRouteRecord (pathList: Array<string>, pathMap: Dictionary<RouteRecord>, nameMap: Dictionary<RouteRecord>, route: RouteConfig, parent?: RouteRecord, matchAs?: string) {
     // 获取路由配置下的属性
     const { path, name } = route
     if (process.env.NODE_ENV !== 'production') {
@@ -179,8 +174,7 @@ function addRouteRecord (pathList: Array<string>,
     }
 }
 
-function compileRouteRegex (path: string,
-    pathToRegexpOptions: PathToRegexpOptions): RouteRegExp {
+function compileRouteRegex (path: string, pathToRegexpOptions: PathToRegexpOptions): RouteRegExp {
     const regex = Regexp(path, [], pathToRegexpOptions)
     if (process.env.NODE_ENV !== 'production') {
         const keys: any = Object.create(null)
@@ -193,9 +187,7 @@ function compileRouteRegex (path: string,
     return regex
 }
 
-function normalizePath (path: string,
-    parent?: RouteRecord,
-    strict?: boolean): string {
+function normalizePath (path: string, parent?: RouteRecord, strict?: boolean): string {
     if (!strict) path = path.replace(/\/$/, '')
     if (path[0] === '/') return path
     if (parent == null) return path

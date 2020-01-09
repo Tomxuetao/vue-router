@@ -74,9 +74,7 @@ export default class VueRouter {
     }
 
     // 匹配路由信息
-    match (raw: RawLocation,
-        current?: Route,
-        redirectedFrom?: Location): Route {
+    match (raw: RawLocation, current?: Route, redirectedFrom?: Location): Route {
         return this.matcher.match(raw, current, redirectedFrom)
     }
 

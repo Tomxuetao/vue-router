@@ -31,19 +31,23 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
 
     // 路由匹配
     function match (raw: RawLocation, currentRoute?: Route, redirectedFrom?: Location): Route {
+        // 序列化url
         const location = normalizeLocation(raw, currentRoute, false, router)
         const { name } = location
 
+        // 如果是命名路由，就判断记录中是否有该命名路由配置
         if (name) {
             const record = nameMap[name]
             if (process.env.NODE_ENV !== 'production') {
                 warn(record, `Route with name '${name}' does not exist`)
             }
+            // 没有找到表示没有匹配的路由
             if (!record) return _createRoute(null, location)
             const paramNames = record.regex.keys
                 .filter(key => !key.optional)
                 .map(key => key.name)
 
+            // 参数处理
             if (typeof location.params !== 'object') {
                 location.params = {}
             }
@@ -59,21 +63,23 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
             location.path = fillParams(record.path, location.params, `named route "${name}"`)
             return _createRoute(record, location, redirectedFrom)
         } else if (location.path) {
+            // 非命名路由处理
             location.params = {}
             for (let i = 0; i < pathList.length; i++) {
+                // 查找记录
                 const path = pathList[i]
                 const record = pathMap[path]
+                // 如果匹配路由，则创建路由
                 if (matchRoute(record.regex, location.path, location.params)) {
                     return _createRoute(record, location, redirectedFrom)
                 }
             }
         }
-        // no match
+        // no match：没有匹配的路由
         return _createRoute(null, location)
     }
 
-    function redirect (record: RouteRecord,
-        location: Location): Route {
+    function redirect (record: RouteRecord, location: Location): Route {
         const originalRedirect = record.redirect
         let redirect = typeof originalRedirect === 'function'
             ? originalRedirect(createRoute(record, location, null, router))
@@ -145,6 +151,14 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
         return _createRoute(null, location)
     }
 
+    /**
+     * 根据条件创建不同的路由
+     * @param record
+     * @param location
+     * @param redirectedFrom
+     * @returns {Route}
+     * @private
+     */
     function _createRoute (record: ?RouteRecord, location: Location, redirectedFrom?: Location): Route {
         if (record && record.redirect) {
             return redirect(record, redirectedFrom || location)

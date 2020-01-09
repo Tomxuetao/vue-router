@@ -5,18 +5,17 @@ import { stringifyQuery } from './query'
 
 const trailingSlashRE = /\/?$/
 
-export function createRoute (record: ?RouteRecord,
-    location: Location,
-    redirectedFrom?: ?Location,
-    router?: VueRouter): Route {
+export function createRoute (record: ?RouteRecord, location: Location, redirectedFrom?: ?Location, router?: VueRouter): Route {
     const stringifyQuery = router && router.options.stringifyQuery
 
+    // 拷贝参数
     let query: any = location.query || {}
     try {
         query = clone(query)
     } catch (e) {
     }
 
+    // 创建路由对象
     const route: Route = {
         name: location.name || (record && record.name),
         meta: (record && record.meta) || {},
@@ -30,6 +29,7 @@ export function createRoute (record: ?RouteRecord,
     if (redirectedFrom) {
         route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery)
     }
+    // 让路由对象不可更改
     return Object.freeze(route)
 }
 
@@ -52,6 +52,12 @@ export const START = createRoute(null, {
     path: '/'
 })
 
+/**
+ * 获取包含当前路由的所有嵌套路径片段的路由记录
+ * 包含从根路由到当前路由的匹配记录，自上而下
+ * @param record
+ * @returns {[]}
+ */
 function formatMatch (record: ?RouteRecord): Array<RouteRecord> {
     const res = []
     while (record) {
