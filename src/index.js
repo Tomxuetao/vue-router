@@ -22,19 +22,39 @@ export default class VueRouter {
     static install: () => void;
     static version: string;
 
+    // Vue install，配置了router的Vue根实例
     app: any;
     apps: Array<any>;
     ready: boolean;
     readyCbs: Array<Function>;
     options: RouterOptions;
+    // 路由使用的模式
     mode: string;
     history: HashHistory | HTML5History | AbstractHistory;
     matcher: Matcher;
+    /**
+     * 当浏览器不支持 history.pushState 控制路由是否应该回退到 hash 模式。默认值为 true。在 IE9 中，设置为 false 会使得每个 router-link 导航都触发整页刷新。
+     * 它可用于工作在 IE9 下的服务端渲染应用，因为一个 hash 模式的 URL 并不支持服务端渲染。
+     */
     fallback: boolean;
     beforeHooks: Array<?NavigationGuard>;
     resolveHooks: Array<?NavigationGuard>;
     afterHooks: Array<?AfterNavigationHook>;
 
+    /**
+     * options = {
+     *      routes?: Array<RouteConfig>;
+     *      mode?: string;
+     *      fallback?: boolean;
+     *      base?: string;
+     *      linkActiveClass?: string;
+     *      linkExactActiveClass?: string;
+     *      parseQuery?: (query: string) => Object;
+     *      stringifyQuery?: (query: Object) => string;
+     *      scrollBehavior?: (to: Route,from: Route,savedPosition: ?Position) => PositionResult | Promise<PositionResult>;
+     * }
+     * @param options
+     */
     constructor (options: RouterOptions = {}) {
         this.app = null
         this.apps = []
@@ -78,10 +98,12 @@ export default class VueRouter {
         return this.matcher.match(raw, current, redirectedFrom)
     }
 
+    // 获取当前路由
     get currentRoute (): ?Route {
         return this.history && this.history.current
     }
 
+    // 初始化
     init (app: any /* Vue component instance */) {
         process.env.NODE_ENV !== 'production' && assert(install.installed,
             `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +

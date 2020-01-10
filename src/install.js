@@ -55,12 +55,14 @@ export function install (Vue) {
         }
     })
 
+    // 将$router绑定到Vue的原型上
     Object.defineProperty(Vue.prototype, '$router', {
         get () {
             return this._routerRoot._router
         }
     })
 
+    // 将$route绑定到Vue的原型上
     Object.defineProperty(Vue.prototype, '$route', {
         get () {
             return this._routerRoot._route
