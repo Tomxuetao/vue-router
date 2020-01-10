@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body, .site-wrapper {
+            margin: 0;
+            padding: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        #click, #back {
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            font-weight: bold;
+            text-align: center;
+            line-height: 28px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="site-wrapper">
+    <div id="clickTarget">
+        <button class="push-next">点击我进入bar.html页面</button>
+        <button class="back-next">点击我回退到之前页面</button>
+    </div>
+</div>
+<script>
+    var clickDom = document.getElementById('clickTarget')
+    clickDom.onclick = function (event) {
+        if (event.target.classList.contains('push-next')) {
+            history.pushState({
+                foo: "bar"
+            }, "page2", "bar.html")
+        } else if (event.target.classList.contains('back-next')) {
+            history.back()
+        } else {
+            console.log(history.state)
+        }
+
+    }
+</script>
+</body>
+
+</html>

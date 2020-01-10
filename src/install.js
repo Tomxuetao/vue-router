@@ -11,11 +11,15 @@ export let _Vue
  */
 export function install (Vue) {
     // 确保install调用一次
-    if (install.installed && _Vue === Vue) return
+    if (install.installed && _Vue === Vue) {
+        return
+    }
+
     install.installed = true
     // 把Vue赋值给全局变量
     _Vue = Vue
 
+    // 判断是否为undefined的方法
     const isDef = v => v !== undefined
 
     const registerInstance = (vm, callVal) => {
