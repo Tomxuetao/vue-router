@@ -58,10 +58,7 @@ export default {
         data.registerRouteInstance = (vm, val) => {
             // val could be undefined for unregistration
             const current = matched.instances[name]
-            if (
-                (val && current !== vm) ||
-                (!val && current === vm)
-            ) {
+            if ((val && current !== vm) || (!val && current === vm)) {
                 matched.instances[name] = val
             }
         }

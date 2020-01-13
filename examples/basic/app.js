@@ -27,7 +27,7 @@ const router = new VueRouter({
 // 4. Create and mount root instance.
 // Make sure to inject the router.
 // Route components will be rendered inside <router-view>.
-new Vue({
+var vm = new Vue({
     router,
     data: () => ({ n: 0 }),
     template: `
@@ -59,6 +59,7 @@ new Vue({
 
     methods: {
         navigateAndIncrement () {
+            console.log(vm)
             const increment = () => this.n++
             if (this.$route.path === '/') {
                 this.$router.push('/foo', increment)

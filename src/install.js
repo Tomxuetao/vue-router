@@ -19,9 +19,18 @@ export function install (Vue) {
     // 把Vue赋值给全局变量
     _Vue = Vue
 
-    // 判断是否为undefined的方法
+    /**
+     * 判断是否为undefined的方法
+     * @param v
+     * @returns {boolean}
+     */
     const isDef = v => v !== undefined
 
+    /**
+     * 注册实例
+     * @param vm
+     * @param callVal
+     */
     const registerInstance = (vm, callVal) => {
         let i = vm.$options._parentVnode
         if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
@@ -73,6 +82,7 @@ export function install (Vue) {
     Vue.component('RouterView', View)
     Vue.component('RouterLink', Link)
 
+    // 合并策略
     const strats = Vue.config.optionMergeStrategies
     // use the same hook merging strategy for route hooks
     strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created

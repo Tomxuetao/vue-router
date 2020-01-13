@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    const isDef = v => v !== undefined;
+
+    isDef(n = 1)
+
+    /**
+     *  赋值运算符（assignment operator）基于右值（right operand）的值，给左值（left operand）赋值。
+     *  JavaScript中，赋值运算是从右到左的
+     *  step1: 计算a.x的值，此时a.x指向{x:1}对象的x;
+     *  step2: 计算a的值，让a重新指向{}；
+     *  step3: 得到 step2的值，也就是{}；
+     *  step4: 将 step3的结果赋给 step1 的结果，也就是{x：1}的对象x重新赋值{}；
+     *  step5: 返回 step3 的结果；
+     *  执行完毕，a指向{}，则a.x为undefined，
+     * @type {{x: number}}
+     */
+    var a = { x: 1 }
+    a.x = a = {}
+
+    console.log(a.x) // undefined
+</script>
+</body>
+</html>
