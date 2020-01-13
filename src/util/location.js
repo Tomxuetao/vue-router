@@ -7,12 +7,20 @@ import { fillParams } from './params'
 import { warn } from './warn'
 import { extend } from './misc'
 
-export function normalizeLocation (raw: RawLocation,
-    current: ?Route,
-    append: ?boolean,
-    router: ?VueRouter): Location {
+/**
+ * 解析传入的跳转路由信息，并提取相应字段，返回一个标准路由对象（可见单元测试location.spec.js）
+ * raw可以是一个字符串（'/home'），也可以是一个对象即route.push({.....})中的跳转路由信息
+ * @param raw
+ * @param current
+ * @param append
+ * @param router
+ * @returns {Location|{path: (string|string), query: Dictionary<string>, _normalized: boolean, hash: string}}
+ */
+export function normalizeLocation (raw: RawLocation, current: ?Route, append: ?boolean, router: ?VueRouter): Location {
+    // 当raw是字符串时包裹成一个对象
     let next: Location = typeof raw === 'string' ? { path: raw } : raw
     // named target
+    // row如果有name或者被规范化了就直接返回
     if (next._normalized) {
         return next
     } else if (next.name) {
@@ -25,6 +33,7 @@ export function normalizeLocation (raw: RawLocation,
     }
 
     // relative params
+    // 即没有 name 也没有 path 的跳转
     if (!next.path && next.params && current) {
         next = extend({}, next)
         next._normalized = true
@@ -41,6 +50,7 @@ export function normalizeLocation (raw: RawLocation,
         return next
     }
 
+    // 返回一个解析后的对象
     const parsedPath = parsePath(next.path || '')
     const basePath = (current && current.path) || '/'
     const path = parsedPath.path

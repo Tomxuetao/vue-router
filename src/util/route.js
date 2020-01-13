@@ -5,11 +5,19 @@ import { stringifyQuery } from './query'
 
 const trailingSlashRE = /\/?$/
 
+/**
+ * 创建$route对象
+ * @param record
+ * @param location
+ * @param redirectedFrom
+ * @param router
+ * @returns {Route}
+ */
 export function createRoute (record: ?RouteRecord, location: Location, redirectedFrom?: ?Location, router?: VueRouter): Route {
     const stringifyQuery = router && router.options.stringifyQuery
 
-    // 拷贝参数
     let query: any = location.query || {}
+    //  深拷贝query对象
     try {
         query = clone(query)
     } catch (e) {
@@ -24,6 +32,7 @@ export function createRoute (record: ?RouteRecord, location: Location, redirecte
         query,
         params: location.params || {},
         fullPath: getFullPath(location, stringifyQuery),
+        // 返回当前的路由记录以及所有的父路由的记录（父 => 子）
         matched: record ? formatMatch(record) : []
     }
     if (redirectedFrom) {

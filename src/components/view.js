@@ -3,7 +3,7 @@ import { extend } from '../util/misc'
 
 export default {
     name: 'RouterView',
-    functional: true,
+    functional: true, // 函数式组件，它的render函数支持第二个参数
     props: {
         name: {
             type: String,
@@ -17,7 +17,14 @@ export default {
         // directly use parent context's createElement() function
         // so that components rendered by router-view can resolve named slots
         const h = parent.$createElement
+        // name为命名视图的 name 默认为 default
         const name = props.name
+        /**
+         * 由于 _route 在 vue-router 初始化时变成了一个响应式对象
+         * 所以会触发 _route 的 getter，收集当前的渲染 watcher（src/install.js:40）
+         * 当 /src/index.js:126 路由跳转后，会触发其 setter，重新运行 render 函数更新视图
+         */
+        //  因为此时是 parent 组件，所以 Dep.target 为 parent 组件的渲染 watcher
         const route = parent.$route
         const cache = parent._routerViewCache || (parent._routerViewCache = {})
 
@@ -26,6 +33,9 @@ export default {
         let depth = 0
         let inactive = false
         while (parent && parent._routerRoot !== parent) {
+            // depth 表示router-view的深度，当当前router-view的parent又是一个router-view时，当前的router-view深度就会+1
+            // 默认是0，当发生了router-view的嵌套关系时，里层的router-view的depth为1
+            // 根据 routes 配置项中的嵌套关系，来渲染对应的视图
             const vnodeData = parent.$vnode && parent.$vnode.data
             if (vnodeData) {
                 if (vnodeData.routerView) {
@@ -44,6 +54,8 @@ export default {
             return h(cache[name], data, children)
         }
 
+        // matched来自当前route的matched属性
+        // matched是一个数组，顺序由父 => 子（src/util/route.js:32），根据深度来返回对应的路由记录
         const matched = route.matched[depth]
         // render empty node if no matched route
         if (!matched) {
@@ -55,6 +67,9 @@ export default {
 
         // attach instance registration hook
         // this will be called in the instance's injected lifecycle hooks
+        // this will be called in the instance's injected lifecycle hooks
+        // 将组件的instances属性等于 val 参数(src/install.js:37)
+        // 在执行 registerRouteInstance 时，已经可以获取到 vm 实例（因为是在组件的 beforeCreate 中被执行的，而此时已经生成了 vm 实例）
         data.registerRouteInstance = (vm, val) => {
             // val could be undefined for unregistration
             const current = matched.instances[name]
@@ -81,6 +96,7 @@ export default {
         }
 
         // resolve props
+        // 解析路由的参数并给组件通过 props 传参（在路由记录中会存在 props 属性）
         let propsToPass = data.props = resolveProps(route, matched.props && matched.props[name])
         if (propsToPass) {
             // clone to prevent mutation
@@ -99,6 +115,7 @@ export default {
     }
 }
 
+// 路由组件传参的不同模式
 function resolveProps (route, config) {
     switch (typeof config) {
     case 'undefined':

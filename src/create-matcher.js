@@ -14,10 +14,8 @@ export type Matcher = {
 };
 
 /**
- * createMatcher 函数的作用就是创建路由映射表，
- * 然后通过闭包的方式让 addRoutes 和 match函数能够使用路由映射表的几个对象，
- * 最后返回一个 Matcher 对象。
- * @param routes
+ * createMatcher返回一个含有match方法和addRoutes方法的对象给router对象的matcher属性
+ * @param routes: routes为实例化vueRouter的路由列表
  * @param router
  * @returns {{match: match, addRoutes: addRoutes}}
  */
@@ -25,13 +23,30 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
     // 创建路由映射表
     const { pathList, pathMap, nameMap } = createRouteMap(routes)
 
+    /**
+     * routes 生成三个路由映射表后，会向外暴露一个动态添加路由的 API
+     * 这个 api 日常开发也遇到过，用于动态注册路由，它的原理其实很简单，
+     * 就是接受一个 routes 数组，再次调用 createRouteMap 将数组每个元素转换成路由记录 (RouteRecord) ，
+     * 然后合并到之前生成的路由映射表中
+     * @param routes
+     */
     function addRoutes (routes) {
+        // 创建路由的映射表
         createRouteMap(routes, pathList, pathMap, nameMap)
     }
 
-    // 路由匹配
+    /**
+     * 函数用于创建 $route 对象
+     * route 是针对 new Router 时传入的 routes 数组的每个元素，也就是路由配置项对象，
+     * 而 $route 是最终返回作为 Vue.prototype.$route 的对象，在类型定义中，route 的类型是 RouteConfig，
+     * 而 $route 的类型是 Route，具体接口的定义可以查看源代码，虽然在源码中两者变量名都是 route，但我下文会使用 $route 来区分最终返回的 route 对象
+     * @param raw: 值为location.pathname（第一次跳转）或者 location 对象
+     * @param currentRoute
+     * @param redirectedFrom
+     * @returns {Route}
+     */
     function match (raw: RawLocation, currentRoute?: Route, redirectedFrom?: Location): Route {
-        // 序列化url
+        // 首先会执行 normalizeLocation 函数， 它是一个辅助函数，会将调用 router.push / router.replace 时跳转的路由地址转为一个 location 对象
         const location = normalizeLocation(raw, currentRoute, false, router)
         const { name } = location
 
@@ -41,8 +56,11 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
             if (process.env.NODE_ENV !== 'production') {
                 warn(record, `Route with name '${name}' does not exist`)
             }
-            // 没有找到表示没有匹配的路由
-            if (!record) return _createRoute(null, location)
+            // 没有找到表示没有匹配的路由, 创建route路由对象
+            if (!record) {
+                return _createRoute(null, location)
+            }
+
             const paramNames = record.regex.keys
                 .filter(key => !key.optional)
                 .map(key => key.name)
@@ -63,19 +81,22 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
             location.path = fillParams(record.path, location.params, `named route "${name}"`)
             return _createRoute(record, location, redirectedFrom)
         } else if (location.path) {
-            // 非命名路由处理
+            // 非命名路由处理,去pathList和pathMap根据path找对应的路由信息
             location.params = {}
             for (let i = 0; i < pathList.length; i++) {
                 // 查找记录
                 const path = pathList[i]
                 const record = pathMap[path]
-                // 如果匹配路由，则创建路由
+                // 使用当前 location 的 path 属性和每个路由记录的正则属性进行匹配
                 if (matchRoute(record.regex, location.path, location.params)) {
+                    // 结合 record 创建route路由对象
                     return _createRoute(record, location, redirectedFrom)
                 }
             }
         }
-        // no match：没有匹配的路由
+
+        // no match
+        // 创建一个匹配失败的route对象（会在视图中创建一个注释节点）
         return _createRoute(null, location)
     }
 
@@ -152,7 +173,7 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
     }
 
     /**
-     * 根据条件创建不同的路由
+     * 创建路由对象,一般情况下会执行createRoute方法
      * @param record
      * @param location
      * @param redirectedFrom
@@ -175,6 +196,13 @@ export function createMatcher (routes: Array<RouteConfig>, router: VueRouter): M
     }
 }
 
+/**
+ * 遍历每个记录的regex正则，匹配传入的当前的location.path，成功则返回true
+ * @param regex
+ * @param path
+ * @param params
+ * @returns {boolean}
+ */
 function matchRoute (regex: RouteRegExp, path: string, params: Object): boolean {
     const m = path.match(regex)
 
