@@ -161,6 +161,7 @@ export default class VueRouter {
         } else if (history instanceof HashHistory) {
             // 添加hashchange监听
             const setupHashListener = () => {
+                // 调用 hash.js中的setupListeners()方法
                 history.setupListeners()
             }
             // 路由跳转
