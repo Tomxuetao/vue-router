@@ -23,10 +23,7 @@ export function setupScroll () {
     })
 }
 
-export function handleScroll (router: Router,
-    to: Route,
-    from: Route,
-    isPop: boolean) {
+export function handleScroll (router: Router, to: Route, from: Route, isPop: boolean) {
     if (!router.app) {
         return
     }
@@ -43,10 +40,7 @@ export function handleScroll (router: Router,
     // wait until re-render finishes before scrolling
     router.app.$nextTick(() => {
         const position = getScrollPosition()
-        const shouldScroll = behavior.call(router,
-            to,
-            from,
-            isPop ? position : null)
+        const shouldScroll = behavior.call(router, to, from, isPop ? position : null)
 
         if (!shouldScroll) {
             return
@@ -68,6 +62,9 @@ export function handleScroll (router: Router,
     })
 }
 
+/**
+ * 保存滚轮位置
+ */
 export function saveScrollPosition () {
     const key = getStateKey()
     if (key) {
@@ -78,6 +75,10 @@ export function saveScrollPosition () {
     }
 }
 
+/**
+ * 获取滚轮位置
+ * @returns {*}
+ */
 function getScrollPosition (): ?Object {
     const key = getStateKey()
     if (key) {
@@ -85,6 +86,12 @@ function getScrollPosition (): ?Object {
     }
 }
 
+/**
+ * 获取
+ * @param el
+ * @param offset
+ * @returns {{x: number, y: number}}
+ */
 function getElementPosition (el: Element, offset: Object): Object {
     const docEl: any = document.documentElement
     const docRect = docEl.getBoundingClientRect()
@@ -95,10 +102,20 @@ function getElementPosition (el: Element, offset: Object): Object {
     }
 }
 
+/**
+ * 验证
+ * @param obj
+ * @returns {boolean}
+ */
 function isValidPosition (obj: Object): boolean {
     return isNumber(obj.x) || isNumber(obj.y)
 }
 
+/**
+ * 标准化位置
+ * @param obj
+ * @returns {{x: (Object.x), y: (Object.y)}}
+ */
 function normalizePosition (obj: Object): Object {
     return {
         x: isNumber(obj.x) ? obj.x : window.pageXOffset,
@@ -106,6 +123,11 @@ function normalizePosition (obj: Object): Object {
     }
 }
 
+/**
+ * 标准化 Offset
+ * @param obj
+ * @returns {{x: (Object.x|number), y: (Object.y|number)}}
+ */
 function normalizeOffset (obj: Object): Object {
     return {
         x: isNumber(obj.x) ? obj.x : 0,
@@ -113,12 +135,22 @@ function normalizeOffset (obj: Object): Object {
     }
 }
 
+/**
+ * 校验是否是数字
+ * @param v
+ * @returns {boolean}
+ */
 function isNumber (v: any): boolean {
     return typeof v === 'number'
 }
 
 const hashStartsWithNumberRE = /^#\d/
 
+/**
+ * 回滚到给定位置
+ * @param shouldScroll
+ * @param position
+ */
 function scrollToPosition (shouldScroll, position) {
     const isObject = typeof shouldScroll === 'object'
     if (isObject && typeof shouldScroll.selector === 'string') {

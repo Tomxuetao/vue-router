@@ -19,6 +19,11 @@ export const supportsPushState = inBrowser && (function () {
     return window.history && 'pushState' in window.history
 })()
 
+/**
+ *
+ * @param url
+ * @param replace
+ */
 export function pushState (url?: string, replace?: boolean) {
     saveScrollPosition()
     // try...catch the pushState call to get around Safari

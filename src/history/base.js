@@ -296,9 +296,7 @@ function normalizeBase (base: ?string): string {
  * @param next: 是跳转路由
  * @returns {{updated: Array<T>, deactivated: Array<T>, activated: Array<T>}}
  */
-function resolveQueue (current: Array<RouteRecord>, next: Array<RouteRecord>): {
-    updated: Array<RouteRecord>, activated: Array<RouteRecord>, deactivated: Array<RouteRecord>
-} {
+function resolveQueue (current: Array<RouteRecord>, next: Array<RouteRecord>): { updated: Array<RouteRecord>, activated: Array<RouteRecord>, deactivated: Array<RouteRecord> } {
     let i
     const max = Math.max(current.length, next.length)
     // i 为两个 current,next 中的分岔点

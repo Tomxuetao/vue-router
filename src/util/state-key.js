@@ -2,11 +2,12 @@
 import { inBrowser } from './dom'
 
 // use User Timing api (if present) for more accurate key precision
-const Time =
-    inBrowser && window.performance && window.performance.now
-        ? window.performance
-        : Date
+const Time = inBrowser && window.performance && window.performance.now ? window.performance : Date
 
+/**
+ * 生成stateKey
+ * @returns {string}
+ */
 export function genStateKey (): string {
     return Time.now().toFixed(3)
 }
