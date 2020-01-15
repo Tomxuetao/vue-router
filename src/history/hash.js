@@ -32,22 +32,21 @@ export class HashHistory extends History {
         /**
          * 哈希路由在初始化的时候，执行完transitionTo，会给浏览器监听前进和后退的事件
          */
-        window.addEventListener(supportsPushState ? 'popstate' : 'hashchange',
-            () => {
-                const current = this.current
-                if (!ensureSlash()) {
-                    return
+        window.addEventListener(supportsPushState ? 'popstate' : 'hashchange', () => {
+            const current = this.current
+            if (!ensureSlash()) {
+                return
+            }
+            // 当点击浏览器前进/后退后，会重新执行 transitionTo 方法
+            this.transitionTo(getHash(), route => {
+                if (supportsScroll) {
+                    handleScroll(this.router, route, current, true)
                 }
-                // 当点击浏览器前进/后退后，会重新执行 transitionTo 方法
-                this.transitionTo(getHash(), route => {
-                    if (supportsScroll) {
-                        handleScroll(this.router, route, current, true)
-                    }
-                    if (!supportsPushState) {
-                        replaceHash(route.fullPath)
-                    }
-                })
+                if (!supportsPushState) {
+                    replaceHash(route.fullPath)
+                }
             })
+        })
     }
 
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {

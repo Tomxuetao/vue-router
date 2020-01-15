@@ -6,11 +6,7 @@ import { inBrowser } from '../util/dom'
 import { runQueue } from '../util/async'
 import { warn, isError, isExtendedError } from '../util/warn'
 import { START, isSameRoute } from '../util/route'
-import {
-    flatten,
-    flatMapComponents,
-    resolveAsyncComponents
-} from '../util/resolve-components'
+import { flatten, flatMapComponents, resolveAsyncComponents } from '../util/resolve-components'
 import { NavigationDuplicated } from './errors'
 
 export class History {
