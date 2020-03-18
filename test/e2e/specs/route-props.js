@@ -32,7 +32,7 @@ module.exports = {
             .assert.urlEquals('http://localhost:8080/route-props/attrs')
             .assert.containsText('.hello', 'Hello attrs' + $attrs)
 
-        // should be consistent
+            // should be consistent
             .click('li:nth-child(4) a')
             .click('li:nth-child(5) a')
             .assert.urlEquals('http://localhost:8080/route-props/attrs')

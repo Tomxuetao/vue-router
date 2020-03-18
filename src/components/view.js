@@ -10,7 +10,7 @@ export default {
             default: 'default'
         }
     },
-    render (_, { props, children, parent, data }) {
+    render(_, { props, children, parent, data }) {
         // used by devtools to display a router-view badge
         data.routerView = true
 
@@ -78,11 +78,11 @@ export default {
             }
         }
 
-        // also register instance in prepatch hook
-        // in case the same component instance is reused across different routes
-        ;(data.hook || (data.hook = {})).prepatch = (_, vnode) => {
-            matched.instances[name] = vnode.componentInstance
-        }
+            // also register instance in prepatch hook
+            // in case the same component instance is reused across different routes
+            ; (data.hook || (data.hook = {})).prepatch = (_, vnode) => {
+                matched.instances[name] = vnode.componentInstance
+            }
 
         // register instance in init hook
         // in case kept-alive component be actived when routes changed
@@ -116,21 +116,28 @@ export default {
 }
 
 // 路由组件传参的不同模式
-function resolveProps (route, config) {
+function resolveProps(route, config) {
     switch (typeof config) {
-    case 'undefined':
-        return
-    case 'object':
-        return config
-    case 'function':
-        return config(route)
-    case 'boolean':
-        return config ? route.params : undefined
-    default:
-        if (process.env.NODE_ENV !== 'production') {
-            warn(false,
-                `props in "${route.path}" is a ${typeof config}, ` +
+        case 'undefined':
+            return
+        case 'object':
+            return config
+        case 'function':
+            return config(route)
+        case 'boolean':
+            return config ? route.params : undefined
+        default:
+            if (process.env.NODE_ENV !== 'production') {
+                warn(false,
+                    `props in "${route.path}" is a ${typeof config}, ` +
                     `expecting an object, function or boolean.`)
-        }
+            }
     }
+}
+
+function extend(to, from) {
+    for (const key in from) {
+        to[key] = from[key]
+    }
+    return to
 }
