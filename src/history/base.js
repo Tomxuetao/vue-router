@@ -74,7 +74,7 @@ export class History {
          * current是切换前的$route对象
          */
 
-        // 获取路由信息
+        // 获取路由信息（route路径）
         const route = this.router.match(location, this.current)
         // 触发路由钩子
         this.confirmTransition(route,

@@ -65,17 +65,23 @@ export function install (Vue) {
     Vue.mixin({
         //  全局混入，在beforeCreate中会初始化当前路由的信息
         /** vue-router流程
-         * 触发路由跳转 => init => transitionTo => 执行准备离开相关的路由钩子 => 接受到异步组件并解析 => 执行准备进入的路由的钩子
-         * 确认导航成功  => 更新视图（触发完组件的所有声明周期） => 触发beforeRouterEnter的回调
+         * 触发路由跳转 => init => transitionTo => 执行准备离开相关的路由钩子 => 接受到异步组件并解析 => 执行准备进入的路由的钩子 => 确认导航成功  => 更新视图（触发完组件的所有声明周期） => 触发beforeRouterEnter的回调
          */
         beforeCreate () {
-            // 当是根实例时会进行路由初始化操作
+            /**
+             * new Vue({
+             *  router,
+             *  store,
+             *  render: h => h(App)
+             *  }).$mount('#app')
+             *  当是根实例时会进行路由初始化操作，this.$options.router实际就是通过new Vue() 传过来的 router 对象
+             */
             if (isDef(this.$options.router)) {
                 // 将routerRoot等于根实例
                 this._routerRoot = this
                 // 给根实例添加_router属性等于router对象
                 this._router = this.$options.router
-                // 执行init方法初始化路由传入根实例
+                // 执行init方法初始化路由传入根实例, this指向Vue
                 this._router.init(this)
                 /** 将根实例的_router属性，即组件实例的$route属性定义为响应式，每次路由确认导航时会触发setter，将根实例重新渲染**/
                 // 每次路由切换都会执行回调修改_router(src/index.js:124)

@@ -1,8 +1,8 @@
 /* @flow */
 
 import Regexp from 'path-to-regexp'
-import { cleanPath } from './util/path'
-import { assert, warn } from './util/warn'
+import {cleanPath} from './util/path'
+import {assert, warn} from './util/warn'
 
 /**
  * 通过用户配置的路由规则来创建对应的路由映射表
@@ -14,7 +14,8 @@ import { assert, warn } from './util/warn'
  * 返回3个对象pathList,pathMap,nameMap
  * @returns {{nameMap: Dictionary<RouteRecord>, pathMap: Dictionary<RouteRecord>, pathList: Array<string>}}
  */
-export function createRouteMap (routes: Array<RouteConfig>,
+export function createRouteMap (
+    routes: Array<RouteConfig>,
     oldPathList?: Array<string>,
     oldPathMap?: Dictionary<RouteRecord>,
     oldNameMap?: Dictionary<RouteRecord>): {
@@ -79,32 +80,43 @@ export function createRouteMap (routes: Array<RouteConfig>,
  * @param parent
  * @param matchAs
  */
-function addRouteRecord (pathList: Array<string>, pathMap: Dictionary<RouteRecord>, nameMap: Dictionary<RouteRecord>, route: RouteConfig, parent?: RouteRecord, matchAs?: string) {
-    // 获取路由的path属性和name属性
-    const { path, name } = route
+function addRouteRecord (
+    pathList: Array<string>,
+    pathMap: Dictionary<RouteRecord>,
+    nameMap: Dictionary<RouteRecord>,
+    route: RouteConfig,
+    parent?: RouteRecord, matchAs?: string) {
+    // 获取路由的path属性和name属性从路由的配置中
+    const {path, name} = route
     if (process.env.NODE_ENV !== 'production') {
         assert(path != null, `"path" is required in a route configuration.`)
         assert(typeof route.component !== 'string',
             `route config "component" for path: ${String(path || name)} cannot be a ` + `string id. Use an actual component instead.`)
     }
 
-    const pathToRegexpOptions: PathToRegexpOptions =
-        route.pathToRegexpOptions || {}
-    // 在创建路由记录前，会使用 normalizedPath 规范化 route 对象的路径，如果传入的 route 对象含有父级 route 对象，会将父级 route 对象的 path 拼上当前的 path
+    // 路径正则配置
+    const pathToRegexpOptions: PathToRegexpOptions = route.pathToRegexpOptions || {}
+    /**
+     * 在创建路由记录前，会使用 normalizedPath 规范化 route 对象的路径，
+     * 如果传入的 route 对象含有父级 route 对象，会将父级 route 对象的 path 拼上当前的 path
+     * @type {string}
+     */
     const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
 
     if (typeof route.caseSensitive === 'boolean') {
         pathToRegexpOptions.sensitive = route.caseSensitive
     }
 
-    // 定义当前route的路由记录，路由记录基于路由配置项对象扩展了一些额外属性
+    /**
+     * 定义当前route的路由记录，路由记录基于路由配置项对象扩展了一些额外属性
+     */
     const record: RouteRecord = {
         // 规范化后的路由,路由的完整路径
         path: normalizedPath,
         // 匹配到当前 route 对象的正则
         regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
         // route 对象的组件（因为 vue-router 中有命名视图，所以会默认放在 default 属性下，instances 同理）
-        components: route.components || { default: route.component },
+        components: route.components || {default: route.component},
         // route 对象对应的 vm 实例
         instances: {},
         // route 对象的名字
@@ -120,12 +132,7 @@ function addRouteRecord (pathList: Array<string>, pathMap: Dictionary<RouteRecor
         // 路由元信息
         meta: route.meta || {},
         // 路由跳转时的传参
-        props:
-            route.props == null
-                ? {}
-                : route.components
-                    ? route.props
-                    : { default: route.props }
+        props: route.props == null ? {} : route.components ? route.props : {default: route.props}
     }
 
     if (route.children) {

@@ -72,13 +72,14 @@ export default class VueRouter {
         // 根据mode采取不同路由方法
         let mode = options.mode || 'hash'
 
-        // 选择了history模式但是不支持会回退到hash路由
+        // 选择了history模式但是不支持会回退到hash路由。 supportsPushState判断游览器是否支持history模式，不支持降级为hash模式
         this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
 
         // 降级为hash模式（显示声明为hash模式 | 不支持history模式 | 要求降级fallback:true）
         if (this.fallback) {
             mode = 'hash'
         }
+        // 在非浏览器中使用
         if (!inBrowser) {
             mode = 'abstract'
         }
@@ -153,7 +154,7 @@ export default class VueRouter {
 
         this.app = app
 
-        // 赋值路由模式
+        // 拿到路由模式对象
         const history = this.history
 
         if (history instanceof HTML5History) {
