@@ -79,9 +79,9 @@ export function install (Vue) {
             if (isDef(this.$options.router)) {
                 // 将routerRoot等于根实例
                 this._routerRoot = this
-                // 给根实例添加_router属性等于router对象
+                // 给根实例添加_router属性等于router对象(new VueRouter () VueRouter实例)
                 this._router = this.$options.router
-                // 执行init方法初始化路由传入根实例, this指向Vue
+                // 执行init方法初始化路由传入根实例, this指向Vue实例 （init()方法定义在 index.js中）
                 this._router.init(this)
                 /** 将根实例的_router属性，即组件实例的$route属性定义为响应式，每次路由确认导航时会触发setter，将根实例重新渲染**/
                 // 每次路由切换都会执行回调修改_router(src/index.js:124)
