@@ -20,6 +20,7 @@ export class HTML5History extends History {
 
         // HTML5 的 history 路由是在初始化时监听 popstate 事件，并传入回调 transitionTo 的
         const initLocation = getLocation(this.base)
+        // 浏览器前进后退改变触发 ‘popstate’ 事件
         window.addEventListener('popstate', () => {
             const current = this.current
 
@@ -38,10 +39,12 @@ export class HTML5History extends History {
         })
     }
 
+    // 实现父类的方法
     go (n: number) {
         window.history.go(n)
     }
 
+    // 实现父类的方法
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(location, route => {
@@ -51,6 +54,7 @@ export class HTML5History extends History {
         }, onAbort)
     }
 
+    // 实现父类的方法
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(location, route => {
@@ -60,6 +64,7 @@ export class HTML5History extends History {
         }, onAbort)
     }
 
+    // 实现父类的方法
     ensureURL (push?: boolean) {
         if (getLocation(this.base) !== this.current.fullPath) {
             const current = cleanPath(this.base + this.current.fullPath)
@@ -67,6 +72,7 @@ export class HTML5History extends History {
         }
     }
 
+    // 实现父类的方法
     getCurrentLocation (): string {
         return getLocation(this.base)
     }

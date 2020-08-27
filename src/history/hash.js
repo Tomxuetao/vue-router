@@ -31,6 +31,7 @@ export class HashHistory extends History {
 
         /**
          * 哈希路由在初始化的时候，执行完transitionTo，会给浏览器监听前进和后退的事件
+         * supportsPushState: 判断是否支持 popstate 事件
          */
         window.addEventListener(supportsPushState ? 'popstate' : 'hashchange', () => {
             const current = this.current
@@ -49,6 +50,7 @@ export class HashHistory extends History {
         })
     }
 
+    // 实现父类的方法
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(location,
@@ -60,6 +62,7 @@ export class HashHistory extends History {
             onAbort)
     }
 
+    // 实现父类的方法
     replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         const { current: fromRoute } = this
         this.transitionTo(location,
@@ -71,10 +74,12 @@ export class HashHistory extends History {
             onAbort)
     }
 
+    // 实现父类的方法
     go (n: number) {
         window.history.go(n)
     }
 
+    // 实现父类的方法
     ensureURL (push?: boolean) {
         const current = this.current.fullPath
         if (getHash() !== current) {
@@ -82,6 +87,7 @@ export class HashHistory extends History {
         }
     }
 
+    // 实现父类的方法
     getCurrentLocation () {
         return getHash()
     }

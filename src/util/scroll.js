@@ -87,7 +87,7 @@ function getScrollPosition (): ?Object {
 }
 
 /**
- * 获取
+ * 获取 頁面位置
  * @param el
  * @param offset
  * @returns {{x: number, y: number}}

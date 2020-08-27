@@ -20,7 +20,7 @@ export class History {
     readyErrorCbs: Array<Function>
     errorCbs: Array<Function>
 
-    // implemented by sub-classes
+    // implemented by sub-classes 由子类实现相关方法
     +go: (n: number) => void
     +push: (loc: RawLocation) => void
     +replace: (loc: RawLocation) => void
@@ -107,7 +107,8 @@ export class History {
                         cb(err)
                     })
                 }
-            })
+            }
+        )
     }
 
     /**
@@ -251,7 +252,8 @@ export class History {
                         })
                     }
                 })
-            })
+            }
+        )
     }
 
     // 确认导航成功，执行afterEach钩子
@@ -392,7 +394,13 @@ function bindGuard (guard: NavigationGuard, instance: ?_Vue): ?NavigationGuard {
     }
 }
 
-// 组件内的路由导航守卫 --->beforeRouteEnter
+/**
+ * 组件内的路由导航守卫 --->beforeRouteEnter
+ * @param activated
+ * @param cbs
+ * @param isValid
+ * @returns {Array}
+ */
 function extractEnterGuards (activated: Array<RouteRecord>,
     cbs: Array<Function>,
     isValid: () => boolean): Array<?Function> {

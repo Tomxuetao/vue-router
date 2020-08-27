@@ -113,7 +113,7 @@ function addRouteRecord (
     const record: RouteRecord = {
         // 规范化后的路由,路由的完整路径
         path: normalizedPath,
-        // 匹配到当前 route 对象的正则
+        // 匹配到当前 route 对象的正则表达式
         regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
         // route 对象的组件（因为 vue-router 中有命名视图，所以会默认放在 default 属性下，instances 同理）
         components: route.components || {default: route.component},
@@ -157,9 +157,7 @@ function addRouteRecord (
         }
         // 递归路由配置的children属性，添加路由记录
         route.children.forEach(child => {
-            const childMatchAs = matchAs
-                ? cleanPath(`${matchAs}/${child.path}`)
-                : undefined
+            const childMatchAs = matchAs ? cleanPath(`${matchAs}/${child.path}`) : undefined
             // 与第一次调用addRouteRecord不同的是，递归遍历children会额外传入record,childMatchAs参数
             // record是当前路由项，即子组件父路由的路由记录
             addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs)
